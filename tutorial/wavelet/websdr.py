@@ -28,7 +28,7 @@ def scalogram(data):
 
 
 # Загрузите сигнал, возьмите первый канал.
-rate, signal = wavfile.read('../source/websdr.wav')
+rate, signal = wavfile.read('../../source/raw/wav/websdr.wav')
 signal = signal[0:lepow2(len(signal))]
 tree = pywt.wavedec(signal, 'coif5')
 pylab.gray()

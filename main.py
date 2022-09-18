@@ -1,8 +1,11 @@
 from utils.load import load_middleware
-from utils.write import save_data_middleware
+from utils.write import save_middleware
 
 
 def main():
+    # data = load_middleware('raw', 'shashlindos.wav')
+    # save_middleware(data, 'json')
+    # save_middleware(data, 'txt')
     pass
 
 

@@ -45,7 +45,7 @@ def write_data_txt(data: Iterable, absolute_path: str = None) -> None:
         write_file.write(json.dumps(prepare_to_write(data), ensure_ascii=False))
 
 
-def save_data_middleware(data: Iterable, file_type: str, file_name: str = None):
+def save_middleware(data: Iterable, file_type: str, file_name: str = None):
     """
     :param data: data to write
     :param file_name: relative file path

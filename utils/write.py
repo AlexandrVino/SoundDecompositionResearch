@@ -13,9 +13,9 @@ def prepare_to_write(obj: Iterable | int) -> List | str:
 
     Function, convert different iterable types to json serializable
     """
-
+    print(obj)
     if isinstance(obj, Iterable):
-        return list(map(lambda x: prepare_to_write(x), obj))
+        return list(map(lambda x: prepare_to_write(x) if isinstance(x, Iterable) else str(x), obj))
     return str(obj)
 
 

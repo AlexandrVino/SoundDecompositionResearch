@@ -4,6 +4,8 @@ from typing import Any, List
 from scipy.io import wavfile
 
 from config import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+import librosa
+from pydub import AudioSegment
 
 
 def prepare_to_load(obj: str | List[Any]) -> list | Any:
@@ -28,7 +30,7 @@ def load_wav(absolute_path: str) -> List[Any]:
     Function, that loads *.wav files
     """
 
-    samplerate, data = wavfile.read(absolute_path)
+    data = AudioSegment.from_wav(absolute_path)
     return data
 
 
@@ -39,8 +41,8 @@ def load_mp3(absolute_path: str) -> List[Any]:
 
     Function, that loads *.mp3 files
     """
-
-    pass
+    data = AudioSegment.from_mp3(absolute_path)
+    return data
 
 
 def load_txt(absolute_path: str) -> List[Any]:

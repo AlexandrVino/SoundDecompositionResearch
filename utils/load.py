@@ -1,11 +1,14 @@
 import json
+import os
+from pathlib import Path
 from typing import Any, List
 
-from scipy.io import wavfile
-
 from config import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
-import librosa
 from pydub import AudioSegment
+
+
+AudioSegment.converter = f"C:\\ffmpeg\\bin"
+AudioSegment.ffprobe = f"C:\\ffmpeg\\bin"
 
 
 def prepare_to_load(obj: str | List[Any]) -> list | Any:
@@ -30,7 +33,12 @@ def load_wav(absolute_path: str) -> List[Any]:
     Function, that loads *.wav files
     """
 
-    data = AudioSegment.from_wav(absolute_path)
+    print(absolute_path)
+
+    sound = AudioSegment.from_wav(absolute_path)
+
+    # this is an array
+    data = sound.get_array_of_samples()
     return data
 
 
@@ -41,8 +49,12 @@ def load_mp3(absolute_path: str) -> List[Any]:
 
     Function, that loads *.mp3 files
     """
-    data = AudioSegment.from_mp3(absolute_path)
-    return data
+
+    print(absolute_path)
+    x, sr = AudioSegment.from_mp3(str(absolute_path))
+    # this is an array
+    print(x, sr)
+    return sr
 
 
 def load_txt(absolute_path: str) -> List[Any]:
@@ -98,7 +110,7 @@ def load_middleware(load_type: str, file_name: str) -> List[int]:
 
     root, load_type_func = read_func.get(load_type, ('', {}))
     file_type: str = file_name.split('.')[-1]
-    absolute_path: str = f'{root}\\{file_type}\\{file_name}'
+    absolute_path: Path = Path(f'{root}\\{file_type}\\{file_name}')
 
     if not load_type_func:
         raise ValueError(

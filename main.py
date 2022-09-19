@@ -3,7 +3,7 @@ from utils.write import save_middleware
 
 
 def main():
-    data = load_middleware('raw', 'shashlindos.wav')
+    data = load_middleware('raw', 'shashlindos.mp3')
     save_middleware(data, 'json')
     save_middleware(data, 'txt')
     pass

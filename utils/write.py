@@ -13,7 +13,7 @@ def prepare_to_write(obj: Iterable | int) -> List | str:
 
     Function, convert different iterable types to json serializable
     """
-    print(obj)
+
     if isinstance(obj, Iterable):
         return list(map(lambda x: prepare_to_write(x) if isinstance(x, Iterable) else str(x), obj))
     return str(obj)
@@ -61,7 +61,7 @@ def save_middleware(data: Iterable, file_type: str, file_name: str = None):
     }
 
     if not file_name:
-        file_name = f'file_%i.{file_type}' % len(os.listdir(f'{PROJECT_SOURCE_PROCESSED}/{file_type}/'))
+        file_name = f'file_%i.{file_type}' % len(os.listdir(f'{PROJECT_SOURCE_PROCESSED}\\{file_type}\\'))
 
     absolute_path: str = f'{PROJECT_SOURCE_PROCESSED}\\{file_type}\\{file_name}'
 

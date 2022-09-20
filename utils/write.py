@@ -6,7 +6,7 @@ from typing import Iterable, List
 from config import PROJECT_SOURCE_PROCESSED
 
 
-def prepare_to_write(obj: Iterable | int) -> List | str:
+def prepare_to_write_json(obj: Iterable | int) -> List | str:
     """
     :param obj: Iterable obj
     :return: data as List obj to write in json
@@ -15,7 +15,20 @@ def prepare_to_write(obj: Iterable | int) -> List | str:
     """
 
     if isinstance(obj, Iterable):
-        return list(map(lambda x: prepare_to_write(x) if isinstance(x, Iterable) else str(x), obj))
+        return list(map(lambda x: prepare_to_write_json(x) if isinstance(x, Iterable) else str(x), obj))
+    return str(obj)
+
+
+def prepare_to_write_txt(obj: Iterable | int) -> str:
+    """
+    :param obj: Iterable obj
+    :return: data as List obj to write in json
+
+    Function, convert different iterable types to json serializable
+    """
+
+    if isinstance(obj, Iterable):
+        return ', '.join(map(lambda x: prepare_to_write_json(x) if isinstance(x, Iterable) else str(x), obj))
     return str(obj)
 
 
@@ -29,7 +42,7 @@ def write_data_json(data: Iterable, absolute_path: str = None) -> None:
     """
 
     with open(absolute_path, 'w') as write_file:
-        json.dump(prepare_to_write(data), write_file, ensure_ascii=False)
+        json.dump(prepare_to_write_json(data), write_file, ensure_ascii=False)
 
 
 def write_data_txt(data: Iterable, absolute_path: str = None) -> None:
@@ -42,7 +55,7 @@ def write_data_txt(data: Iterable, absolute_path: str = None) -> None:
     """
 
     with open(absolute_path, 'w') as write_file:
-        write_file.write(json.dumps(prepare_to_write(data), ensure_ascii=False))
+        write_file.write(prepare_to_write_txt(data))
 
 
 def save_middleware(data: Iterable, file_type: str, file_name: str = None):

@@ -24,7 +24,7 @@ def prepare_to_write_txt(obj: Iterable | int) -> str:
     :param obj: Iterable obj
     :return: data as List obj to write in json
 
-    Function, convert different iterable types to json serializable
+    Function, convert different iterable types to write data in txt
     """
 
     if isinstance(obj, Iterable):

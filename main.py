@@ -1,5 +1,9 @@
+import asyncio
+import os
+
+from __config__ import PROJECT_SOURCE_RAW
 from utils.argparse import clear_environ
-from utils.load import load_middleware
+from utils.load import check_dir, check_file, load_middleware
 from utils.write import save_middleware
 from aiomisc.log import basic_config, LogFormat
 
@@ -14,7 +18,7 @@ parser = ArgumentParser(
 
 # logging group
 parser.add_argument(
-    '--input-file', required=True
+    '--input-from', required=True, help='file (dir) name to upload (the script will find it by itself)', default='mp3'
 )
 parser.add_argument(
     '--output-file', default=None
@@ -31,7 +35,7 @@ parser.add_argument(
 )
 
 
-def main():
+async def main():
     """
     :return: None
 
@@ -42,15 +46,16 @@ def main():
     clear_environ(lambda arg: arg.startswith(ENV_VAR_PREFIX))
     basic_config(args.log_level, args.log_format, buffered=True)
 
-    data = load_middleware('raw', args.input_file)
-    array_of_samples = data.get_array_of_samples()
+    input_file = args.input_from
 
-    save_middleware(array_of_samples, 'json')
-    save_middleware(array_of_samples, 'txt')
+    if '.' in input_file:
+        await check_file(input_file)
+    else:
+        await check_dir(f'{PROJECT_SOURCE_RAW}/{input_file}/')
 
     # Don't print this because it's pass a lot of time to write data in console
     # print(array_of_samples)
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())

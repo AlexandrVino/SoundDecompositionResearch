@@ -1,11 +1,13 @@
 import json
 import logging
+import os
 from pathlib import Path
 from typing import Any, List
 
 from pydub import AudioSegment
 
 from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+from utils.write import save_middleware
 
 log = logging.getLogger(__name__)
 
@@ -13,6 +15,7 @@ log = logging.getLogger(__name__)
 AudioSegment.converter = f"C:\\ffmpeg\\bin\\ffmpeg.exe"
 AudioSegment.ffprobe = f"C:\\ffmpeg\\bin\\ffprobe.exe"
 AudioSegment.ffmpeg = f"C:\\ffmpeg\\bin\\ffmpeg.exe"
+
 
 # This doesn't work so unzip ffmpeg form "https://disk.yandex.ru/d/BVNQSeq81lADtA" to C:\\
 # AudioSegment.converter = f"{PROJECT_PATH}\\ffmpeg\\bin\\ffmpeg.exe"
@@ -84,9 +87,8 @@ def load_json(absolute_path: str) -> List[Any]:
         return prepare_to_load(json.load(input_file))
 
 
-def load_middleware(load_type: str, file_name: str) -> List[int] | AudioSegment:
+def load_middleware(file_name: str) -> List[int] | AudioSegment:
     """
-    :param load_type: Loading data from raw or processed files
     :param file_name: relative file path
     :return: Array of input file data
 
@@ -113,8 +115,11 @@ def load_middleware(load_type: str, file_name: str) -> List[int] | AudioSegment:
         ]
     }
 
-    root, load_type_func = read_func.get(load_type, ('', {}))
     file_type: str = file_name.split('.')[-1]
+
+    load_type = 'processed' if file_type in ('json', 'txt') else 'raw'
+
+    root, load_type_func = read_func.get(load_type, ('', {}))
     absolute_path: Path = Path(f'{root}\\{file_type}\\{file_name}')
 
     if not load_type_func:
@@ -134,3 +139,17 @@ def load_middleware(load_type: str, file_name: str) -> List[int] | AudioSegment:
     log.info(f"End of data loading")
 
     return val
+
+
+async def check_dir(dir_name: str):
+    for file_name in os.listdir(dir_name):
+        if os.path.isfile(f"{dir_name}/{file_name}") and '.py' not in file_name:
+            await check_file(file_name)
+
+
+async def check_file(input_file: str):
+    data = load_middleware(input_file)
+    array_of_samples = data.get_array_of_samples()
+
+    save_middleware(array_of_samples, 'json')
+    save_middleware(array_of_samples, 'txt')

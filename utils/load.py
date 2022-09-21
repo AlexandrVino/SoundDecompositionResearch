@@ -2,7 +2,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Any, List
+from typing import Any, List, Tuple
 
 from pydub import AudioSegment
 
@@ -87,7 +87,7 @@ def load_json(absolute_path: str) -> List[Any]:
         return prepare_to_load(json.load(input_file))
 
 
-def load_middleware(file_name: str) -> List[int] | AudioSegment:
+def load_middleware(file_name: str) -> Tuple[List[int], str] | Tuple[AudioSegment, str]:
     """
     :param file_name: relative file path
     :return: Array of input file data
@@ -138,19 +138,26 @@ def load_middleware(file_name: str) -> List[int] | AudioSegment:
     val = func(absolute_path)
     log.info(f"End of data loading")
 
-    return val
+    return val, file_name
 
 
-def check_dir(dir_name: str):
+def read_files_from_dir(dir_name: str):
     for file_name in os.listdir(dir_name):
+        if os.path.isfile(f"{dir_name}/{file_name}") and '.py' not in file_name:
+            read_file(file_name)
 
-        if os.path.isfile(f"{dir_name}/{file_name}"):
-            check_file(file_name)
+
+def read_file(input_file: str):
+
+    data, file_name = load_middleware(input_file)
+
+    if '.wav' in file_name or '.mp3' in file_name:
+        new_file_name = file_name.split('.')[0]
+        array_of_samples = data.get_array_of_samples()
+        save_middleware(array_of_samples, 'json', file_name=new_file_name + '.json')
+        save_middleware(array_of_samples, 'txt', file_name=file_name + '.txt')
+    else:
+
+        print(data)
 
 
-def check_file(input_file: str):
-    data = load_middleware(input_file)
-    array_of_samples = data.get_array_of_samples()
-
-    save_middleware(array_of_samples, 'json')
-    save_middleware(array_of_samples, 'txt')

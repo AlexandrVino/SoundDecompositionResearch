@@ -1,12 +1,9 @@
-import os
-
-from __config__ import PROJECT_SOURCE_RAW
-from utils.argparse import clear_environ
-from utils.load import check_dir, check_file, load_middleware
-from utils.write import save_middleware
 from aiomisc.log import basic_config, LogFormat
-
 from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
+
+from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+from utils.argparse import clear_environ
+from utils.load import read_files_from_dir, read_file
 
 ENV_VAR_PREFIX = 'sound_decomposition_'
 
@@ -48,9 +45,10 @@ def main():
     input_file = args.input_from
 
     if '.' in input_file:
-        check_file(input_file)
+        read_file(input_file)
     else:
-        check_dir(f'{PROJECT_SOURCE_RAW}/{input_file}/')
+        root = PROJECT_SOURCE_RAW if input_file in ('mp3', 'wav') else PROJECT_SOURCE_PROCESSED
+        read_files_from_dir(f'{root}/{input_file}/')
 
     # Don't print this because it's pass a lot of time to write data in console
     # print(array_of_samples)

@@ -6,9 +6,9 @@ from typing import Any, List
 from config import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
 from pydub import AudioSegment
 
-
-AudioSegment.converter = f"C:\\ffmpeg\\bin"
-AudioSegment.ffprobe = f"C:\\ffmpeg\\bin"
+AudioSegment.converter = f"C:\\ffmpeg\\bin\\ffmpeg.exe"
+AudioSegment.ffprobe = f"C:\\ffmpeg\\bin\\ffprobe.exe"
+AudioSegment.ffmpeg = f"C:\\ffmpeg\\bin\\ffmpeg.exe"
 
 
 def prepare_to_load(obj: str | List[Any]) -> list | Any:
@@ -33,13 +33,7 @@ def load_wav(absolute_path: str) -> List[Any]:
     Function, that loads *.wav files
     """
 
-    print(absolute_path)
-
-    sound = AudioSegment.from_wav(absolute_path)
-
-    # this is an array
-    data = sound.get_array_of_samples()
-    return data
+    return AudioSegment.from_wav(absolute_path)
 
 
 def load_mp3(absolute_path: str) -> List[Any]:
@@ -50,11 +44,7 @@ def load_mp3(absolute_path: str) -> List[Any]:
     Function, that loads *.mp3 files
     """
 
-    print(absolute_path)
-    x, sr = AudioSegment.from_mp3(str(absolute_path))
-    # this is an array
-    print(x, sr)
-    return sr
+    return AudioSegment.from_mp3(absolute_path)
 
 
 def load_txt(absolute_path: str) -> List[Any]:
@@ -81,7 +71,7 @@ def load_json(absolute_path: str) -> List[Any]:
         return prepare_to_load(json.load(input_file))
 
 
-def load_middleware(load_type: str, file_name: str) -> List[int]:
+def load_middleware(load_type: str, file_name: str) -> List[int] | AudioSegment:
     """
     :param load_type: Loading data from raw or processed files
     :param file_name: relative file path

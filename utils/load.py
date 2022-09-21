@@ -141,13 +141,14 @@ def load_middleware(file_name: str) -> List[int] | AudioSegment:
     return val
 
 
-async def check_dir(dir_name: str):
+def check_dir(dir_name: str):
     for file_name in os.listdir(dir_name):
-        if os.path.isfile(f"{dir_name}/{file_name}") and '.py' not in file_name:
-            await check_file(file_name)
+
+        if os.path.isfile(f"{dir_name}/{file_name}"):
+            check_file(file_name)
 
 
-async def check_file(input_file: str):
+def check_file(input_file: str):
     data = load_middleware(input_file)
     array_of_samples = data.get_array_of_samples()
 

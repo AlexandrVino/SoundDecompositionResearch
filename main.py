@@ -1,4 +1,3 @@
-import asyncio
 import os
 
 from __config__ import PROJECT_SOURCE_RAW
@@ -35,7 +34,7 @@ parser.add_argument(
 )
 
 
-async def main():
+def main():
     """
     :return: None
 
@@ -49,13 +48,13 @@ async def main():
     input_file = args.input_from
 
     if '.' in input_file:
-        await check_file(input_file)
+        check_file(input_file)
     else:
-        await check_dir(f'{PROJECT_SOURCE_RAW}/{input_file}/')
+        check_dir(f'{PROJECT_SOURCE_RAW}/{input_file}/')
 
     # Don't print this because it's pass a lot of time to write data in console
     # print(array_of_samples)
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    main()

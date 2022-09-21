@@ -148,7 +148,6 @@ def read_files_from_dir(dir_name: str):
 
 
 def read_file(input_file: str):
-
     data, file_name = load_middleware(input_file)
 
     if '.wav' in file_name or '.mp3' in file_name:
@@ -159,5 +158,3 @@ def read_file(input_file: str):
     else:
 
         print(data)
-
-

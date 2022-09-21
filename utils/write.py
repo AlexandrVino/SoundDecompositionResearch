@@ -1,9 +1,12 @@
 import json
+import logging
 import os
 
 from typing import Iterable, List
 
-from config import PROJECT_SOURCE_PROCESSED
+from __config__ import PROJECT_SOURCE_PROCESSED
+
+log = logging.getLogger(__name__)
 
 
 def prepare_to_write_json(obj: Iterable | int) -> List | str:
@@ -41,8 +44,10 @@ def write_data_json(data: Iterable, absolute_path: str = None) -> None:
     Function, that choose upload function according to the file type
     """
 
+    log.info(f"Writing %s" % absolute_path)
     with open(absolute_path, 'w') as write_file:
         json.dump(prepare_to_write_json(data), write_file, ensure_ascii=False)
+    log.info(f"Wrote successful")
 
 
 def write_data_txt(data: Iterable, absolute_path: str = None) -> None:
@@ -54,8 +59,10 @@ def write_data_txt(data: Iterable, absolute_path: str = None) -> None:
     Function, that choose upload function according to the file type
     """
 
+    log.info(f"Writing %s" % absolute_path)
     with open(absolute_path, 'w') as write_file:
         write_file.write(prepare_to_write_txt(data))
+    log.info(f"Wrote successful")
 
 
 def save_middleware(data: Iterable, file_type: str, file_name: str = None):
@@ -67,6 +74,8 @@ def save_middleware(data: Iterable, file_type: str, file_name: str = None):
 
     Function, that choose upload function according to the file type
     """
+
+    log.info(f"Start of writing data")
 
     write_func: dict = {
         'json': write_data_json,
@@ -84,4 +93,6 @@ def save_middleware(data: Iterable, file_type: str, file_name: str = None):
             f'Unknown file type "{file_type}" '
             f'(file types must be one of ({", ".join(f".{key}" for key in write_func.keys())})'
         )
+
     func(data, absolute_path)
+    log.info(f"End of data writing")

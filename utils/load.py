@@ -1,14 +1,24 @@
 import json
-import os
+import logging
 from pathlib import Path
 from typing import Any, List
 
-from config import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
 from pydub import AudioSegment
 
+from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+
+log = logging.getLogger(__name__)
+
+# Setup pydub variables
 AudioSegment.converter = f"C:\\ffmpeg\\bin\\ffmpeg.exe"
 AudioSegment.ffprobe = f"C:\\ffmpeg\\bin\\ffprobe.exe"
 AudioSegment.ffmpeg = f"C:\\ffmpeg\\bin\\ffmpeg.exe"
+
+
+# This doesn't work so unzip ffmpeg form "https://disk.yandex.ru/d/BVNQSeq81lADtA" to C:\\
+# AudioSegment.converter = f"{PROJECT_PATH}\\ffmpeg\\bin\\ffmpeg.exe"
+# AudioSegment.ffprobe = f"{PROJECT_PATH}\\ffmpeg\\bin\\ffprobe.exe"
+# AudioSegment.ffmpeg = f"{PROJECT_PATH}\\ffmpeg\\bin\\ffmpeg.exe"
 
 
 def prepare_to_load(obj: str | List[Any]) -> list | Any:
@@ -33,6 +43,7 @@ def load_wav(absolute_path: str) -> List[Any]:
     Function, that loads *.wav files
     """
 
+    log.info(f"Loading %s" % absolute_path)
     return AudioSegment.from_wav(absolute_path)
 
 
@@ -44,6 +55,7 @@ def load_mp3(absolute_path: str) -> List[Any]:
     Function, that loads *.mp3 files
     """
 
+    log.info(f"Loading %s" % absolute_path)
     return AudioSegment.from_mp3(absolute_path)
 
 
@@ -55,6 +67,7 @@ def load_txt(absolute_path: str) -> List[Any]:
     Function, that loads *.txt files
     """
 
+    log.info(f"Loading %s" % absolute_path)
     with open(absolute_path, 'r', encoding='utf8') as input_file:
         return prepare_to_load(json.load(input_file))
 
@@ -67,6 +80,7 @@ def load_json(absolute_path: str) -> List[Any]:
     Function, that loads *.txt files
     """
 
+    log.info(f"Loading %s" % absolute_path)
     with open(absolute_path, 'r', encoding='utf8') as input_file:
         return prepare_to_load(json.load(input_file))
 
@@ -79,6 +93,8 @@ def load_middleware(load_type: str, file_name: str) -> List[int] | AudioSegment:
 
     Function, that choose upload function according to the file type
     """
+
+    log.info(f"Start of loading data")
 
     read_func: dict = {
         'raw': [
@@ -115,4 +131,7 @@ def load_middleware(load_type: str, file_name: str) -> List[int] | AudioSegment:
             f'(file types must be one of ({", ".join(f".{key}" for key in load_type_func.keys())})'
         )
 
-    return func(absolute_path)
+    val = func(absolute_path)
+    log.info(f"End of data loading")
+
+    return val

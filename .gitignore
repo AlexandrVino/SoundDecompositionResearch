@@ -133,3 +133,7 @@ dmypy.json
 
 #ffmpeg
 ffmpeg/
+
+# sourses (processed files to large to upload them to github)
+source/processed/txt/*.txt
+source/processed/json/*.json

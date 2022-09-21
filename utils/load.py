@@ -14,7 +14,6 @@ AudioSegment.converter = f"C:\\ffmpeg\\bin\\ffmpeg.exe"
 AudioSegment.ffprobe = f"C:\\ffmpeg\\bin\\ffprobe.exe"
 AudioSegment.ffmpeg = f"C:\\ffmpeg\\bin\\ffmpeg.exe"
 
-
 # This doesn't work so unzip ffmpeg form "https://disk.yandex.ru/d/BVNQSeq81lADtA" to C:\\
 # AudioSegment.converter = f"{PROJECT_PATH}\\ffmpeg\\bin\\ffmpeg.exe"
 # AudioSegment.ffprobe = f"{PROJECT_PATH}\\ffmpeg\\bin\\ffprobe.exe"

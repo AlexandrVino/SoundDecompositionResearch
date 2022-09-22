@@ -154,7 +154,7 @@ def read_file(input_file: str):
         new_file_name = file_name.split('.')[0]
         array_of_samples = data.get_array_of_samples()
         save_middleware(array_of_samples, 'json', file_name=new_file_name + '.json')
-        save_middleware(array_of_samples, 'txt', file_name=file_name + '.txt')
+        save_middleware(array_of_samples, 'txt', file_name=new_file_name + '.txt')
     else:
 
         print(data)

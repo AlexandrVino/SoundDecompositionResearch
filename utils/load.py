@@ -142,12 +142,25 @@ def load_middleware(file_name: str) -> Tuple[List[int], str] | Tuple[AudioSegmen
 
 
 def read_files_from_dir(dir_name: str):
+    """
+    :param dir_name: dir name
+    :return: None
+
+    Function for reading dirs
+    """
     for file_name in os.listdir(dir_name):
         if os.path.isfile(f"{dir_name}/{file_name}") and '.py' not in file_name:
             read_file(file_name)
 
 
 def read_file(input_file: str):
+    """
+    :param input_file: file name
+    :return: None
+
+    Function for reading files
+    """
+
     data, file_name = load_middleware(input_file)
 
     if '.wav' in file_name or '.mp3' in file_name:

@@ -2,6 +2,9 @@ from load import get_file_data
 import matplotlib.pyplot as plt
 import logging
 
+from utils.my_argparse import setup_basic_config
+
+args = setup_basic_config()
 log = logging.getLogger(__name__)
 
 

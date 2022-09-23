@@ -1,34 +1,6 @@
-from aiomisc.log import basic_config, LogFormat
-from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
-
 from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
-from utils.argparse import clear_environ
+from utils.my_argparse import clear_environ, setup_basic_config
 from utils.load import read_files_from_dir, read_file
-
-ENV_VAR_PREFIX = 'sound_decomposition_'
-
-parser = ArgumentParser(
-    auto_env_var_prefix=ENV_VAR_PREFIX,
-    formatter_class=ArgumentDefaultsHelpFormatter
-)
-
-# logging group
-parser.add_argument(
-    '--input-from', required=True, help='file (dir) name to upload (the script will find it by itself)', default='mp3'
-)
-parser.add_argument(
-    '--output-file', default=None
-)
-
-# logging group
-parser.add_argument(
-    '--log-level', default='info',
-    choices=('debug', 'info', 'warning', 'error', 'fatal')
-)
-parser.add_argument(
-    '--log-format', default='color',
-    choices=LogFormat.choices()
-)
 
 
 def main():
@@ -38,10 +10,7 @@ def main():
     Main function
     """
 
-    args = parser.parse_args()
-    clear_environ(lambda arg: arg.startswith(ENV_VAR_PREFIX))
-    basic_config(args.log_level, args.log_format, buffered=True)
-
+    args = setup_basic_config()
     input_file = args.input_from
 
     if '.' in input_file:

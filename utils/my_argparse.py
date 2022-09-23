@@ -1,6 +1,40 @@
 import os
-from argparse import ArgumentTypeError
+from argparse import ArgumentTypeError, Namespace
 from typing import Callable
+from aiomisc.log import basic_config, LogFormat
+from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
+
+ENV_VAR_PREFIX = 'sound_decomposition_'
+
+parser = ArgumentParser(
+    auto_env_var_prefix=ENV_VAR_PREFIX,
+    formatter_class=ArgumentDefaultsHelpFormatter
+)
+
+# logging group
+parser.add_argument(
+    '--input-from', required=True, help='file (dir) name to upload (the script will find it by itself)', default='mp3'
+)
+parser.add_argument(
+    '--output-file', default=None
+)
+
+# logging group
+parser.add_argument(
+    '--log-level', default='info',
+    choices=('debug', 'info', 'warning', 'error', 'fatal')
+)
+parser.add_argument(
+    '--log-format', default='color',
+    choices=LogFormat.choices()
+)
+
+
+def setup_basic_config() -> Namespace:
+    args = parser.parse_args()
+    clear_environ(lambda arg: arg.startswith(ENV_VAR_PREFIX))
+    basic_config(args.log_level, args.log_format, buffered=True)
+    return args
 
 
 def validate(arg_type: Callable, constrain: Callable) -> Callable:

@@ -23,7 +23,7 @@ AudioSegment.ffmpeg = f"C:\\ffmpeg\\bin\\ffmpeg.exe"
 # AudioSegment.ffmpeg = f"{PROJECT_PATH}\\ffmpeg\\bin\\ffmpeg.exe"
 
 
-def prepare_to_load(obj: str | List[Any]) -> list | Any:
+def prepare_to_load(obj: str | List[Any]) -> List | Any:
     """
     :param obj: Iterable obj
     :return: data as List obj to write in json

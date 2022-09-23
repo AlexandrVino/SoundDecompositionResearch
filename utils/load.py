@@ -158,3 +158,8 @@ def read_file(input_file: str):
     else:
 
         print(data)
+
+
+def get_file_data(input_file: str):
+    data, file_name = load_middleware(input_file)
+    return data

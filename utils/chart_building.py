@@ -9,13 +9,21 @@ log = logging.getLogger(__name__)
 
 
 def build_chart(filename):
+    """
+    :param filename: local path to filename
+    :return chart: input signal per beat
+
+
+    """
+
     log.info(f"get data {filename}")
     data = get_file_data(filename)
     log.info(f"build chart {filename}")
     plt.plot([abs(val) for val in data])
-    plt.xlabel(filename)
+    plt.title(filename)
     plt.show()
 
 
 build_chart("shashlindos.json")
 build_chart("Vivaldi_metal_cover.json")
+build_chart("paparazzi.json")

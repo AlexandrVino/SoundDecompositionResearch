@@ -13,7 +13,7 @@ parser = ArgumentParser(
 
 # logging group
 parser.add_argument(
-    '--input-from', required=True, help='file (dir) name to upload (the script will find it by itself)', default='mp3'
+    '--input-from', required=False, help='file (dir) name to upload (the script will find it by itself)', default='mp3'
 )
 parser.add_argument(
     '--output-file', default=None

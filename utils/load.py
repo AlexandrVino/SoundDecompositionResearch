@@ -95,7 +95,7 @@ def load_middleware(file_name: str) -> Tuple[List[int], str] | Tuple[AudioSegmen
     Function, that choose upload function according to the file type
     """
 
-    log.info(f"Start of loading data")
+    log.info(f"Start loading data")
 
     read_func: dict = {
         'raw': [
@@ -136,7 +136,7 @@ def load_middleware(file_name: str) -> Tuple[List[int], str] | Tuple[AudioSegmen
         )
 
     val = func(absolute_path)
-    log.info(f"End of data loading")
+    log.info(f"End loading data")
 
     return val, file_name
 

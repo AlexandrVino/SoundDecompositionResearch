@@ -15,7 +15,7 @@ def fourier_transform(filename):
     :param filename
     :return: None
 
-    Function for build charts of fourier processed data and save it
+    Function for building charts of fourier processed data and save it
     """
     log.info(f"Get data {filename}")
     normalized_tone = get_file_data(filename)
@@ -37,7 +37,7 @@ def fourier_transform(filename):
         log.info(f"Save chart {filename}")
         plt.savefig(f"../source/processed/fft_signal/{filename.split('.')[0]}")
 
-    # plt.show()
+    plt.show()
     plt.clf()
 
     log.info(f"End {filename}")

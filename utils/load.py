@@ -173,10 +173,10 @@ def read_file(input_file: str):
         array_of_samples = data.get_array_of_samples()
 
         save_middleware(array_of_samples, 'json', file_name=new_file_name + '.json')
-        save_middleware(array_of_samples, 'txt', file_name=new_file_name + '.txt')
+        # save_middleware(array_of_samples, 'txt', file_name=new_file_name + '.txt')
     else:
-
-        print(data)
+        pass
+        # print(data)
 
 
 def get_file_data(input_file: str):

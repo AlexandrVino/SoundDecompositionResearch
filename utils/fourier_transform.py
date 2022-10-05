@@ -45,9 +45,8 @@ def fourier_transform(file_name: str):
 
     if f"{file_name}.jpg" not in os.listdir(f"{PROJECT_SOURCE_PROCESSED}/fft_signal"):
         log.info(f"Save chart {file_name}")
-        plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/fft_signal/{file_name.split('.')[0]}")
+        plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/fft_signal/{file_name.split('.')[0].split('/')[-1]}")
 
-    plt.show()
     plt.clf()
 
     log.info(f"End {file_name}")

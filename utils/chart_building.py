@@ -2,7 +2,7 @@ import os
 from typing import Callable
 
 from __config__ import PROJECT_SOURCE_PATH
-from load import get_file_data
+from utils.load import get_file_data, read_file
 import matplotlib.pyplot as plt
 import logging
 
@@ -35,23 +35,28 @@ def build_chart(file_name: str) -> None:
     log.info(f"End {file_name}")
 
 
-def build_charts_from_dir(dir_name: str, func: Callable) -> None:
-
+def build_charts_from_dir(dir_name: str, func: Callable, sep='') -> None:
     """
 
+    :param sep: sep
     :param dir_name: dir from we should plot charts
     :param func: Callable object (same as function), which we use to plot
     :return:
     """
 
-    log.info(dir_name)
+    log.info(f"{sep}{dir_name}")
 
     for file_name in os.listdir(dir_name):
+
         if os.path.isdir(f"{dir_name}/{file_name}"):
-            build_charts_from_dir(f"{dir_name}/{file_name}", func)
+            build_charts_from_dir(f"{dir_name}/{file_name}", func, sep=sep + '\t')
         else:
+            log.info(sep + '\t' + file_name)
             if not file_name.endswith('.py') and not file_name.endswith('.png'):
-                func(file_name)
+                func(f"{dir_name}/{file_name}")
+
+        log.info(f"{sep}\tFINISHED\t" + file_name)
+    log.info("FINISHED")
 
 
 if __name__ == '__main__':

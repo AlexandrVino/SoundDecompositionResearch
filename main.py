@@ -1,6 +1,6 @@
 from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
-from utils.my_argparse import clear_environ, setup_basic_config
-from utils.load import read_files_from_dir, read_file
+from utils.load import read_file, read_files_from_dir
+from utils.my_argparse import setup_basic_config
 
 
 def main():

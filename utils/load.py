@@ -116,11 +116,10 @@ def load_middleware(file_name: str) -> Tuple[List[int], str] | Tuple[AudioSegmen
     }
 
     file_type: str = file_name.split('.')[-1]
-
     load_type = 'processed' if file_type in ('json', 'txt') else 'raw'
-
     root, load_type_func = read_func.get(load_type, ('', {}))
-    absolute_path: Path = Path(f'{root}\\{file_type}\\{file_name}')
+
+    absolute_path: Path = Path(f'{root}\\{file_type}\\{file_name}') if '\\' not in file_name else Path(file_name)
 
     if not load_type_func:
         raise ValueError(
@@ -148,9 +147,15 @@ def read_files_from_dir(dir_name: str):
 
     Function for reading dirs
     """
+
+    log.info(dir_name)
+
     for file_name in os.listdir(dir_name):
-        if os.path.isfile(f"{dir_name}/{file_name}") and '.py' not in file_name:
-            read_file(file_name)
+        if os.path.isdir(f"{dir_name}/{file_name}"):
+            read_files_from_dir(f"{dir_name}{file_name}")
+        else:
+            if not file_name.endswith('.py') and not file_name.endswith('.png'):
+                read_file(f"{dir_name}/{file_name}")
 
 
 def read_file(input_file: str):
@@ -164,8 +169,9 @@ def read_file(input_file: str):
     data, file_name = load_middleware(input_file)
 
     if '.wav' in file_name or '.mp3' in file_name:
-        new_file_name = file_name.split('.')[0]
+        new_file_name = file_name.split('.')[0].split('/')[-1]
         array_of_samples = data.get_array_of_samples()
+
         save_middleware(array_of_samples, 'json', file_name=new_file_name + '.json')
         save_middleware(array_of_samples, 'txt', file_name=new_file_name + '.txt')
     else:
@@ -174,5 +180,10 @@ def read_file(input_file: str):
 
 
 def get_file_data(input_file: str):
-    data, file_name = load_middleware(input_file)
+    """
+    :param input_file: path to file
+    :return: return data from this file
+    """
+
+    data, _ = load_middleware(input_file)
     return data

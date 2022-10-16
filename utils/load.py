@@ -169,7 +169,7 @@ def read_file(input_file: str):
     data, file_name = load_middleware(input_file)
 
     if '.wav' in file_name or '.mp3' in file_name:
-        new_file_name = file_name.split('.')[0].split('/')[-1]
+        new_file_name = '/'.join(file_name.split('.')[0].split('/')[-2::])
         array_of_samples = data.get_array_of_samples()
 
         save_middleware(array_of_samples, 'json', file_name=new_file_name + '.json')
@@ -186,4 +186,6 @@ def get_file_data(input_file: str):
     """
 
     data, _ = load_middleware(input_file)
+    if data is AudioSegment:
+        return data.get_array_of_samples()
     return data

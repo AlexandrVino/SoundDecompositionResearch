@@ -28,7 +28,7 @@ def fourier_transform(file_name: str):
     png_file_name = '/'.join(file_name.split('.')[0].split('/')[-2::])
     if os.path.exists(f"{PROJECT_SOURCE_PROCESSED}/fft_signal/{png_file_name}.png"):
         return
-    
+
     log.info(f"Fourier Transform")
     log.info(f"Get data {file_name}")
 
@@ -44,6 +44,8 @@ def fourier_transform(file_name: str):
     log.info(f"Build chart {file_name}")
     plt.plot(np.clip(xf, 0, sample_rate // 2 + 1), np.clip(np.abs(yf), 0, 2.5 * 10 ** 7))
     plt.title(file_name.split('/')[-1])
+    plt.ylabel('Амплитуда')
+    plt.xlabel('Частота')
 
     png_file_name = '/'.join(file_name.split('.')[0].split('/')[-2::])
 

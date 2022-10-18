@@ -32,6 +32,8 @@ def prepare_to_load(obj: str | List[Any]) -> List | Any:
     (The json format doesn't support int16, so it is written as str)
     """
 
+    if type(obj) is dict:
+        return obj
     if isinstance(obj, List):
         return list(map(lambda x: prepare_to_load(x), obj))
     return int(obj)
@@ -81,7 +83,6 @@ def load_json(absolute_path: str) -> List[Any]:
 
     Function, that loads *.txt files
     """
-
     log.info(f"Loading %s" % absolute_path)
     with open(absolute_path, 'r', encoding='utf8') as input_file:
         return prepare_to_load(json.load(input_file))

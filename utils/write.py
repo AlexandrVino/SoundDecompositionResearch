@@ -44,6 +44,9 @@ def write_data_json(data: Iterable, absolute_path: str = None) -> None:
     Function, that choose upload function according to the file type
     """
 
+    if os.path.exists(absolute_path):
+        return
+
     log.info(f"Writing %s" % absolute_path)
     with open(absolute_path, 'w') as write_file:
         json.dump(prepare_to_write_json(data), write_file, ensure_ascii=False)

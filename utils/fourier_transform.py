@@ -1,6 +1,6 @@
 from scipy.fft import fft, fftfreq
 
-from __config__ import PROJECT_SOURCE_PATH, PROJECT_SOURCE_PROCESSED
+from __config__ import PROJECT_SOURCE_PATH, PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
 from load import get_file_data
 import logging
 import matplotlib.pyplot as plt
@@ -17,15 +17,18 @@ args = setup_basic_config()
 log = logging.getLogger(__name__)
 
 
-def fourier_transform(file_name: str):
+def fourier_transform(file_name: str, beautiful_name: str = ''):
     """
-    :param file_name
+    :param file_name: local path to filename
+    :param beautiful_name: Beautiful name of the file
     :return: None
 
     Function for building charts of fourier processed data and save it
     """
 
-    png_file_name = '/'.join(file_name.split('.')[0].split('/')[-2::])
+    png_file_name = '/'.join([file_name.split('.')[0].split('/')[-2], beautiful_name]) \
+        if beautiful_name else '/'.join(file_name.split('.')[0].split('/')[-2::])
+
     if os.path.exists(f"{PROJECT_SOURCE_PROCESSED}/fft_signal/{png_file_name}.png"):
         return
 
@@ -43,11 +46,9 @@ def fourier_transform(file_name: str):
 
     log.info(f"Build chart {file_name}")
     plt.plot(np.clip(xf, 0, sample_rate // 2 + 1), np.clip(np.abs(yf), 0, 2.5 * 10 ** 7))
-    plt.title(file_name.split('/')[-1])
+    plt.title(beautiful_name)
     plt.ylabel('Амплитуда')
     plt.xlabel('Частота')
-
-    png_file_name = '/'.join(file_name.split('.')[0].split('/')[-2::])
 
     log.info(f"Save chart {file_name}")
     plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/fft_signal/{png_file_name}")
@@ -59,5 +60,9 @@ def fourier_transform(file_name: str):
 
 
 if __name__ == '__main__':
-    # TODO add 4 genres by 3 trak in each
-    build_charts_from_dir(f"{PROJECT_SOURCE_PROCESSED}/json", fourier_transform)
+
+    build_charts_from_dir(
+        f"{PROJECT_SOURCE_PROCESSED}/json",
+        fourier_transform,
+        file_names=get_file_data(f"{PROJECT_SOURCE_RAW}/songs_names.json")
+    )

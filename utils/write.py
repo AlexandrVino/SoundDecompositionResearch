@@ -9,6 +9,16 @@ from __config__ import PROJECT_SOURCE_PROCESSED
 log = logging.getLogger(__name__)
 
 
+def create_dirs(path: str) -> None:
+    '''
+
+    :param path:
+    :return:
+    '''
+
+    os.makedirs(path)
+
+
 def prepare_to_write_json(obj: Iterable | int) -> List | str:
     """
     :param obj: Iterable obj
@@ -48,6 +58,10 @@ def write_data_json(data: Iterable, absolute_path: str = None) -> None:
         return
 
     log.info(f"Writing %s" % absolute_path)
+    path = '/'.join(absolute_path.split('/')[:-1])
+    if not os.path.exists(path):
+        create_dirs(path)
+
     with open(absolute_path, 'w') as write_file:
         json.dump(prepare_to_write_json(data), write_file, ensure_ascii=False)
     log.info(f"Wrote successful")

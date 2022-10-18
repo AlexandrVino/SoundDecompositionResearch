@@ -45,7 +45,9 @@ def fourier_transform(file_name: str, beautiful_name: str = ''):
     xf = fftfreq(n, 1 / sample_rate)
 
     log.info(f"Build chart {file_name}")
-    plt.plot(np.clip(xf, 0, sample_rate // 2 + 1), np.clip(np.abs(yf), 0, 2.5 * 10 ** 7))
+    # plt.plot(np.clip(xf, 0, sample_rate // 2 + 1), np.clip(np.abs(yf), 0, 2.5 * 10 ** 7))
+    plt.plot(np.clip(xf, 0, sample_rate // 2 + 1), np.abs(yf))
+
     plt.title(beautiful_name)
     plt.ylabel('Амплитуда')
     plt.xlabel('Частота')

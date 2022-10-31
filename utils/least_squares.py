@@ -1,3 +1,4 @@
+import json
 import os
 
 from scipy.optimize import least_squares
@@ -28,7 +29,15 @@ def least_squares_chart(filename, beautiful_name=''):
     png_file_name = '/'.join([filename.split('.')[0].split('/')[-2], beautiful_name]) \
         if beautiful_name else '/'.join(filename.split('.')[0].split('/')[-2::])
 
+    data_filename = png_file_name.split('.')[0].split('/')[1]
+
     if os.path.exists(f"{PROJECT_SOURCE_PROCESSED}/least_squares/{png_file_name}.png"):
+        # return
+        pass
+
+    data = json.load(open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'r', encoding='utf-8'))
+    if data_filename in data:
+        log.info(f'Skip {filename}')
         return
 
     log.info(f"Get data {filename}")
@@ -49,6 +58,15 @@ def least_squares_chart(filename, beautiful_name=''):
 
     log.info(f"Call least_squares {filename}")
     res_lsq = least_squares(fun, x0=a0, args=(x, y))
+
+    log.info(f"Save data {filename}")
+    with open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    data[data_filename] = {'least_squares': list(res_lsq.x)}
+    with open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'w', encoding='utf-8') as file:
+        json.dump(data, file, indent=4, ensure_ascii=False)
+
+    return
 
     log.info(f"Build chart {filename}")
     f = lambda x: sum([u * v for u, v in zip(res_lsq.x, [1, x, x ** 2])])

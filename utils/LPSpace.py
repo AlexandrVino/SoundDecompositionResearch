@@ -57,7 +57,7 @@ with open(f"{PROJECT_SOURCE_PROCESSED}/songs_data.json", encoding='utf8') as inp
             integ.replace('a', str(a)).replace('b', str(b)).replace('c', str(c)),
             frequencies,
             already_solved=True
-        ))))
+        )) / 1e22))
 print(*sorted(
     ans, key=lambda x: x[-1]
 ), sep='\n')

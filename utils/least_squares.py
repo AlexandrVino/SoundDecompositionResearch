@@ -25,7 +25,6 @@ def fun(a, x, y):
 
 
 def least_squares_chart(filename, beautiful_name=''):
-
     png_file_name = '/'.join([filename.split('.')[0].split('/')[-2], beautiful_name]) \
         if beautiful_name else '/'.join(filename.split('.')[0].split('/')[-2::])
 
@@ -36,6 +35,7 @@ def least_squares_chart(filename, beautiful_name=''):
         pass
 
     data = json.load(open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'r', encoding='utf-8'))
+    log.info(f"{data_filename} {data}")
     if data_filename in data:
         log.info(f'Skip {filename}')
         return
@@ -84,14 +84,46 @@ def least_squares_chart(filename, beautiful_name=''):
 
     plt.clf()
     # plt.show()
-    
+
     log.info(f"End {filename}")
 
 
+def build_least_squares_chart():
+    with open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    colours = {
+        'classical_music': 'blue', 'other': 'red',
+        'rock': 'grey', 'metal': 'black'
+    }
+
+    x = np.arange(5000, 15000, 1)
+    for png_file_name, song_data in data.items():
+        log.info(f"Build chart {png_file_name}")
+        y = list(map(
+            lambda val: sum([u * v for u, v in zip(song_data['least_squares'], [1, val, val ** 2])]), x
+        ))
+
+        plt.plot(x, y, colours[song_data['folder']])
+
+        plt.title(png_file_name)
+        plt.ylabel('Амплитуда')
+        plt.xlabel('Частота')
+
+        log.info(f"Save chart {png_file_name}")
+        plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/least_squares/{song_data['folder']}/{png_file_name}")
+
+        plt.clf()
+        # plt.show()
+
+        log.info(f"End {png_file_name}")
+    # plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/least_squares/all.png")
+
+
 if __name__ == '__main__':
-    # least_squares_chart("classical_music/БЕТХОВЕН Лунная Соната.json")
+    #     least_squares_chart("classical_music/БЕТХОВЕН Лунная Соната.json")
     build_charts_from_dir(
         f"{PROJECT_SOURCE_PROCESSED}/json",
         least_squares_chart,
         file_names=get_file_data(f"{PROJECT_SOURCE_RAW}/songs_names.json")
     )
+    # build_least_squares_chart()

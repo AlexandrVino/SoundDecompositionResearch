@@ -1,6 +1,5 @@
 import json
 import os
-
 from scipy.optimize import least_squares
 from scipy.fft import fft, fftfreq
 
@@ -20,6 +19,10 @@ args = setup_basic_config()
 log = logging.getLogger(__name__)
 
 
+def avg(data):
+    return sum(data) / len(data)
+
+
 def fun(a, x, y):
     return a[0] + a[1] * x + a[2] * x ** 2 - y
 
@@ -34,11 +37,11 @@ def least_squares_chart(filename, beautiful_name=''):
     if os.path.exists(f"{PROJECT_SOURCE_PROCESSED}/least_squares/{png_file_name}.png"):
         # return
         pass
-
-    data = json.load(open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'r', encoding='utf-8'))
-    if data_filename in data:
-        log.info(f'Skip {filename}')
-        return
+    #
+    # data = json.load(open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'r', encoding='utf-8'))
+    # if data_filename in data:
+    #     log.info(f'Skip {filename}')
+    #     return
 
     log.info(f"Get data {filename}")
 
@@ -54,26 +57,33 @@ def least_squares_chart(filename, beautiful_name=''):
     y = fft(normalized_tone)
     y = np.clip(np.abs(y), 0, 2.5 * 10 ** 7)
 
-    a0 = np.array([10, 10, 10])
+    step = 100
+    x_1, y_1 = list(), list()
+    for i in range(step, len(x), step):
+        x_1.append(max(x[i - step:i]))
+        y_1.append(max(y[i - step:i]))
+    x, y = np.array(x_1), np.array(y_1)
+
+    a0 = np.array([0, 0, 0])
 
     log.info(f"Call least_squares {filename}")
     res_lsq = least_squares(fun, x0=a0, args=(x, y))
-
-    log.info(f"Save data {filename}")
-    with open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-    data[data_filename] = {'least_squares': list(res_lsq.x)}
-    with open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'w', encoding='utf-8') as file:
-        json.dump(data, file, indent=4, ensure_ascii=False)
-
-    return
-
+    #
+    # log.info(f"Save data {filename}")
+    # with open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'r', encoding='utf-8') as file:
+    #     data = json.load(file)
+    # data[data_filename] = {'least_squares': list(res_lsq.grad)}
+    # with open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'w', encoding='utf-8') as file:
+    #     json.dump(data, file, indent=4, ensure_ascii=False)
+    #
+    # return
+    #
     log.info(f"Build chart {filename}")
     f = lambda x: sum([u * v for u, v in zip(res_lsq.x, [1, x, x ** 2])])
-    x_p = np.linspace(min(x), max(x), 20)
+    x_p = np.linspace(min(x), max(x), 50)
     y_p = f(x_p)
-    plt.plot(x, y, 'o')
-    plt.plot(x_p, y_p, 'b')
+    plt.plot(x, y)
+    plt.plot(x_p, y_p, 'r')
 
     plt.title(beautiful_name)
     plt.ylabel('Амплитуда')
@@ -82,9 +92,9 @@ def least_squares_chart(filename, beautiful_name=''):
     log.info(f"Save chart {filename}")
     plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/least_squares/{png_file_name}")
 
+    plt.show()
     plt.clf()
-    # plt.show()
-    
+
     log.info(f"End {filename}")
 
 

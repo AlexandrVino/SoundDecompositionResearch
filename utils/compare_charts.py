@@ -3,6 +3,7 @@ from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
 from utils.load import get_file_data
 import matplotlib.pyplot as plt
 import logging
+import matplotlib.patches as mpatches
 
 from utils.my_argparse import setup_basic_config
 
@@ -10,10 +11,10 @@ args = setup_basic_config()
 log = logging.getLogger(__name__)
 
 colors = {
-        'classical_music': 'green',
-        'metal': 'blue',
-        'other': 'red',
-        'rock': 'darkblue'
+    'classical_music': '#21dec1',
+    'metal': '#882bc3',
+    'other': '#ff0000',
+    'rock': '#0000fa'
 }
 
 songs_data = get_file_data(f"{PROJECT_SOURCE_PROCESSED}/songs_data.json")
@@ -52,9 +53,11 @@ def find_song_names(directory='all'):
                 data.append([file, name, dir])
             else:
                 break
-
+    already = []
+    fig, ax = plt.subplots()
     for elem in data:
-        build_one_chart(*elem)
+        build_one_chart(*elem, ax, already)
+    ax.legend()
 
     plt.ylabel('Амплитуда')
     plt.xlabel('Частота')
@@ -62,7 +65,7 @@ def find_song_names(directory='all'):
     plt.show()
 
 
-def build_one_chart(file_name, beautiful_name, origin):
+def build_one_chart(file_name, beautiful_name, origin, ax, already):
     log.info(f'Build {file_name}')
 
     if beautiful_name not in songs_data:
@@ -70,7 +73,12 @@ def build_one_chart(file_name, beautiful_name, origin):
         return -1
 
     a = songs_data[beautiful_name]['least_squares']
-    plt.plot([f(x, a) for x in range(25000)], colors[origin])
+    kwargs = dict(label=origin)
+    if kwargs['label'] in already:
+        del kwargs['label']
+    else:
+        already.append(origin)
+    ax.plot([f(x, a) for x in range(25000)], colors[origin], **kwargs)
 
 
 if __name__ == '__main__':

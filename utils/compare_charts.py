@@ -1,3 +1,4 @@
+import json
 import os
 from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
 from utils.load import get_file_data
@@ -61,7 +62,7 @@ def find_song_names(directory='all'):
 
     plt.ylabel('Амплитуда')
     plt.xlabel('Частота')
-    plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/least_squares/compare_charts_1.png")
+    plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/least_squares/compare_charts_1.png", dpi=1000)
     plt.show()
 
 
@@ -81,5 +82,35 @@ def build_one_chart(file_name, beautiful_name, origin, ax, already):
     ax.plot([f(x, a) for x in range(25000)], colors[origin], **kwargs)
 
 
+def solve(current: float, name):
+    """
+    :param current: current value of integral
+    :param name: Title of composition
+    :return:
+    """
+
+    with open(f'{PROJECT_SOURCE_PROCESSED}/integrals.json') as input_file:
+        genres = json.load(input_file)
+
+    with open(f'{PROJECT_SOURCE_PROCESSED}/solution.json', encoding='utf8') as input_file:
+        solution = json.load(input_file)
+
+    for key, value in genres.items():
+        mn, mx = sorted([value, current])
+        if not solution.get(name):
+            solution[name] = {}
+        solution[name][key] = round(mn / mx * 100, 2)
+
+    sm = sum(solution[name].values())
+    for key, value in solution[name].items():
+        solution[name][key] = round(value / sm * 100, 2)
+
+    with open(f'{PROJECT_SOURCE_PROCESSED}/solution.json', 'w', encoding='utf8') as output_file:
+        json.dump(solution, output_file, indent=4, ensure_ascii=False)
+
+    return ''
+
+
 if __name__ == '__main__':
-    find_song_names('all')
+    # find_song_names('all')
+    print(solve(14.266115887496937, "Бах - Сюита №2"))

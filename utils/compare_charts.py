@@ -99,11 +99,11 @@ def solve(current: float, name):
         mn, mx = sorted([value, current])
         if not solution.get(name):
             solution[name] = {}
-        solution[name][key] = round(mn / mx * 100, 2)
+        solution[name][key] = round(mn / mx * 100, 5)
 
     sm = sum(solution[name].values())
     for key, value in solution[name].items():
-        solution[name][key] = round(value / sm * 100, 2)
+        solution[name][key] = round(value / sm * 100, 5)
 
     with open(f'{PROJECT_SOURCE_PROCESSED}/solution.json', 'w', encoding='utf8') as output_file:
         json.dump(solution, output_file, indent=4, ensure_ascii=False)

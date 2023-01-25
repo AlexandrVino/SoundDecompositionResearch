@@ -1,3 +1,4 @@
+import json
 import os
 
 import numpy as np
@@ -6,6 +7,7 @@ from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
 from utils.load import get_file_data
 import matplotlib.pyplot as plt
 import logging
+import matplotlib.patches as mpatches
 
 from utils.my_argparse import setup_basic_config
 
@@ -97,6 +99,35 @@ def build_one_chart(file_name, beautiful_name, origin, ax, already, average):
     average[origin].append(sum(y))
 
     ax.plot(y, colors[origin], **kwargs)
+
+
+def solve(current: float, name):
+    """
+    :param current: current value of integral
+    :param name: Title of composition
+    :return:
+    """
+
+    with open(f'{PROJECT_SOURCE_PROCESSED}/integrals.json') as input_file:
+        genres = json.load(input_file)
+
+    with open(f'{PROJECT_SOURCE_PROCESSED}/solution.json', encoding='utf8') as input_file:
+        solution = json.load(input_file)
+
+    for key, value in genres.items():
+        mn, mx = sorted([value, current])
+        if not solution.get(name):
+            solution[name] = {}
+        solution[name][key] = round(mn / mx * 100, 2)
+
+    sm = sum(solution[name].values())
+    for key, value in solution[name].items():
+        solution[name][key] = round(value / sm * 100, 2)
+
+    with open(f'{PROJECT_SOURCE_PROCESSED}/solution.json', 'w', encoding='utf8') as output_file:
+        json.dump(solution, output_file, indent=4, ensure_ascii=False)
+
+    return ''
 
 
 if __name__ == '__main__':

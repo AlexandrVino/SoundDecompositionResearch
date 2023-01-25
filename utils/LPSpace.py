@@ -58,13 +58,13 @@ def solve_for_data():
         for key, value in data.items():
             c, b, a = map(lambda x: str(round(x, 5)), value['least_squares'])
             curr_integ = integ.replace('a', a).replace('b', b).replace('c', c)
-            print(key, ":", curr_integ)
             ans.append(
                 (
                     key,
-                    solve_lp_for_function(curr_integ, frequencies, already_solved=True) / 1e12
+                    round(solve_lp_for_function(curr_integ, frequencies, already_solved=True) / 1e17)
                 )
             )
+            break
     return sorted(ans, key=lambda x: x[-1])
 
 
@@ -95,7 +95,5 @@ def add_musical_composition(filename):
     least_squares_chart(filename)
 
 
-add_musical_composition(
-    f"{PROJECT_SOURCE_RAW}/mp3/other/Geri Halliwell - It's Raining Men.mp3"
-)
-print('\n'.join(return_genres()))
+x = solve_for_data()
+print(x)

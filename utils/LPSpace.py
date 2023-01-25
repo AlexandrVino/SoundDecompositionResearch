@@ -61,7 +61,7 @@ def solve_for_data():
             ans.append(
                 (
                     key,
-                    round(solve_lp_for_function(curr_integ, frequencies, already_solved=True) / 1e22, 5)
+                    round(solve_lp_for_function(curr_integ, frequencies, already_solved=True) / 1e17)
                 )
             )
             break

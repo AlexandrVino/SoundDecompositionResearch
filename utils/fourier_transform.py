@@ -6,7 +6,7 @@ import logging
 import matplotlib.pyplot as plt
 
 from utils.chart_building import build_charts_from_dir
-from utils.matplotlibSetup import setup_matplotlib_font, setup_matplotlib_text_color
+from utils.matplotlibSetup import setup_matplotlib, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config
 import numpy as np
 import os
@@ -69,7 +69,7 @@ def fourier_transform(file_name: str, beautiful_name: str = ''):
 if __name__ == '__main__':
 
     setup_matplotlib_text_color('white')
-    setup_matplotlib_font(**{'font.size': '13'})
+    setup_matplotlib(**{'font.size': '13'})
 
     build_charts_from_dir(
         f"{PROCESSED}/json",

@@ -9,7 +9,7 @@ from scipy.optimize import least_squares
 from __config__ import PROCESSED, RAW
 from utils.chart_building import build_charts_from_dir
 from utils.load import get_file_data
-from utils.matplotlibSetup import setup_matplotlib_font, setup_matplotlib_text_color
+from utils.matplotlibSetup import setup_matplotlib, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config
 
 args = setup_basic_config()
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     # least_squares_chart("classical_music/БЕТХОВЕН Лунная Соната.json")
 
     setup_matplotlib_text_color('white')
-    setup_matplotlib_font(**{'font.size': '13'})
+    setup_matplotlib(**{'font.size': '13'})
 
     build_charts_from_dir(
         f"{PROCESSED}/json",

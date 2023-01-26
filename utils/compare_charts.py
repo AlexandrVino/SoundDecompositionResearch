@@ -8,14 +8,14 @@ import numpy as np
 from __config__ import PROCESSED, RAW
 from utils.load import get_file_data
 from utils.LPSpace import solve_one_integral
-from utils.matplotlibSetup import setup_matplotlib_font, setup_matplotlib_text_color
+from utils.matplotlibSetup import setup_matplotlib, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config
 
 args = setup_basic_config()
 log = logging.getLogger(__name__)
 
 setup_matplotlib_text_color('white')
-setup_matplotlib_font(**{'font.size': '13'})
+setup_matplotlib(**{'font.size': '13'})
 
 COLORS = {
     'classical_music': '#21dec1',

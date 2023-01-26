@@ -6,7 +6,7 @@ from utils.load import get_file_data, read_file
 import matplotlib.pyplot as plt
 import logging
 
-from utils.matplotlibSetup import setup_matplotlib_font, setup_matplotlib_text_color
+from utils.matplotlibSetup import setup_matplotlib, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config
 
 args = setup_basic_config()
@@ -78,7 +78,7 @@ def build_charts_from_dir(dir_name: str, func: Callable, sep='', file_names: dic
 
 if __name__ == '__main__':
     setup_matplotlib_text_color('white')
-    setup_matplotlib_font(**{'font.size': '13'})
+    setup_matplotlib(**{'font.size': '13'})
     build_charts_from_dir(
         f"{PROCESSED}/json",
         build_chart,

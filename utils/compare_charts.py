@@ -14,7 +14,7 @@ from utils.my_argparse import setup_basic_config
 args = setup_basic_config()
 log = logging.getLogger(__name__)
 
-setup_matplotlib_text_color('black')
+setup_matplotlib_text_color('white')
 setup_matplotlib(**{'font.size': '13'})
 
 COLORS = {
@@ -74,9 +74,9 @@ def find_song_names(directory='all'):
     for elem in data:
         build_one_chart(*elem, ax, already, average, integrals)
 
-    # ax.tick_params(color='white', labelcolor='white')
-    # for spine in ax.spines.values():
-    #     spine.set_edgecolor('white')
+    ax.tick_params(color='white', labelcolor='white')
+    for spine in ax.spines.values():
+        spine.set_edgecolor('white')
     ax.legend()
 
     plt.ylabel('Амплитуда')
@@ -159,9 +159,9 @@ def plot_average_integrals():
     for (data, name, color) in items_data:
         ax.bar([name], [float(data)], color=color)
 
-    # ax.tick_params(color='white', labelcolor='white')
-    # for spine in ax.spines.values():
-    #     spine.set_edgecolor('white')
+    ax.tick_params(color='white', labelcolor='white')
+    for spine in ax.spines.values():
+        spine.set_edgecolor('white')
 
     ax.set_ylabel('Значение Интегралов')
     # ax.legend()

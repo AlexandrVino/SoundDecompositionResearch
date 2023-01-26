@@ -7,6 +7,7 @@ import numpy as np
 
 from __config__ import PROCESSED, RAW
 from utils.load import get_file_data
+from utils.LPSpace import solve_one_integral
 from utils.matplotlibSetup import setup_matplotlib_font, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config
 
@@ -42,8 +43,6 @@ def find_song_names(directory='all'):
     :param directory: all / each / directory_name
     """
     songs_names = get_file_data(f"{RAW}/songs_names.json")
-    if 'Ludovico Einaudi - Fly (megapesni' not in songs_names:
-        print('lol')
     data = list()
 
     dir_name = f"{PROCESSED}/json"
@@ -69,10 +68,11 @@ def find_song_names(directory='all'):
 
     already = []
     average = {}
+    integrals = {}
 
     fig, ax = plt.subplots()
     for elem in data:
-        build_one_chart(*elem, ax, already, average)
+        build_one_chart(*elem, ax, already, average, integrals)
 
     ax.tick_params(color='white', labelcolor='white')
     for spine in ax.spines.values():
@@ -86,7 +86,7 @@ def find_song_names(directory='all'):
     return average
 
 
-def build_one_chart(file_name, beautiful_name, origin, ax, already, average):
+def build_one_chart(file_name, beautiful_name, origin, ax, already, average, integrals):
     log.info(f'Build {file_name}')
 
     if beautiful_name not in songs_data:
@@ -100,15 +100,16 @@ def build_one_chart(file_name, beautiful_name, origin, ax, already, average):
     else:
         already.append(NAMES[origin])
 
-    y = [f(x, a) for x in range(25000)]
     if not average.get(origin):
         average[origin] = []
-    average[origin].append(sum(y))
 
-    ax.plot(y, COLORS[origin], **kwargs)
+    average[origin].append(solve_one_integral(beautiful_name, a)[1])
+    integrals[beautiful_name] = average[origin][-1]
+
+    ax.plot([f(x, a) for x in range(25000)], COLORS[origin], **kwargs)
 
 
-def solve(current: float, title):
+def solution(integrals_solution):
     """
     :param current: current value of integral
     :param title: Title of composition
@@ -119,39 +120,39 @@ def solve(current: float, title):
         genres = json.load(input_file)
 
     with open(f'{PROCESSED}/solution.json', encoding='utf8') as input_file:
-        solution = json.load(input_file)
+        sol = json.load(input_file)
 
-    for key, value in genres.items():
-        mn, mx = sorted([value, current])
-        if not solution.get(title):
-            solution[title] = {}
-        solution[title][key] = round(mn / mx * 100, 2)
-
-    sm = sum(solution[title].values())
-    for key, value in solution[title].items():
-        solution[title][key] = round(value / sm * 100, 2)
+    for title, value in integrals_solution.items():
+        solve(genres, sol, value, title)
 
     with open(f'{PROCESSED}/solution.json', 'w', encoding='utf8') as output_file:
-        json.dump(solution, output_file, indent=4, ensure_ascii=False)
+        json.dump(sol, output_file, indent=4, ensure_ascii=False)
+
+
+def solve(genres, sol, current, title):
+    for key, value in genres.items():
+        mn, mx = sorted([value, current])
+        if not sol.get(title):
+            sol[title] = {}
+        sol[title][key] = round(mn / mx * 1000, 2)
+
+    sm = sum(sol[title].values())
+    for key, value in sol[title].items():
+        sol[title][key] = round(value / sm * 100, 2)
 
 
 def plot_average_integrals():
     plt.clf()
 
-    average = list(map(lambda x: (x[0], sorted(x[1])), find_song_names('all').items()))
-    data = []
-    for genre, item_data in average:
-        n = len(item_data)
-        indexes = [n // 2, n // 2 + 1] if n % 2 == 0 else [n // 2]
+    average = list(map(lambda x: (x[0], sorted(x[1])), find_song_names().items()))
+    data = [
+        [
+            round(sum(item_data) / len(item_data), 5),
+            NAMES[genre],
+            COLORS[genre]
+        ] for genre, item_data in average
+    ]
 
-        data.append(
-            [
-                round(sum(map(lambda x: item_data[x], indexes)) / len(indexes), 5),
-                NAMES[genre],
-                COLORS[genre]
-            ]
-        )
-    print(data)
     items_data = np.array(data)
     fig, ax = plt.subplots()
 
@@ -172,4 +173,65 @@ def plot_average_integrals():
 
 
 if __name__ == '__main__':
-    plot_average_integrals()
+    integrals_solution = {
+        'Бетховаен - к Элизе': 272928614201541,
+        'Бах - Сюита №2': 389878153454718,
+        'Моцарт - Соната №11': 424011686911891,
+        'Ludovico Einaudi - Fly': 459766055683055,
+        'Бетховен - Лунная Соната': 461353478964833,
+        'Фридерик Шопен - Фантазия-экспромт до-диез-минор, арфа': 675006446778743,
+        'Петр Ильич Чайковский - Марш Из Балета Щелкунчик': 717631724895771,
+        'Вивальди - Времена Года (Зима)': 1056041872230682,
+        'Моцарт - симфония №40': 1063645457001178,
+        'Mozart - Маленькая Ночная Серенада Аллегро': 1101940939898704,
+        'Сергей Прокофьев - Танец рыцарей (Балет Ромео и Джульетта, Картина Вторая)': 1104112313961104,
+        'Антонио Вивальди - Осень': 1203812069092099,
+        'Петр Ильич Чайковский - Вальс Цветов': 1288538970097158,
+        'Антонио Вивальди - Лето': 1342654844109467,
+        'Вагнер - Полет Валькирий': 2098274614457001,
+        'QUEEN - We Will Rock You': 2411845177981689,
+        'OPETH - Benighted': 2448954804775267,
+        'guns-n039-roses-don039t-cry': 2930502838951098,
+        'No': 3023565473276510, 'europe-carrie': 3064166396956886,
+        "Guns & Roses - Don't Cry": 3090774888847022,
+        'skid-row-18-and-life': 3376179902940316,
+        'linkin-park-in-the-end': 3694514695333535,
+        'Lady Gaga - Paparazzi': 3837386356316094,
+        'METALLICA - Nothing Else Matters ': 3888028209256786,
+        'imagine-dragons-demons': 4050014988609734,
+        'Lamb Of God - Walk with Me In Hell': 4100970586270982,
+        'ljapis-trubeckojj-voiny-sveta': 4158809398936860,
+        'metallica-the-unforgiven': 4359484132835800,
+        'papa-roach-last-resort': 4369798538977432,
+        'metallica-enter-sandman': 4403183194356534,
+        'Акула - Кислотный Диджей': 4579595173959673,
+        'Паша Сникерс - Не работать это моя работа': 4625425969710236,
+        'Big Baby Tape, kizaru - Million': 4629265629987491,
+        'dire-straits-sultans-of-swing': 4636586510470210,
+        'evanescence-bring-me-to-life': 4644695141877641,
+        'nickelback-burn-it-to-the-ground': 4669416821741676,
+        'Порнофильмы - В диапазоне': 4707260142143104,
+        'metallica-wherever-i-may-roam': 4728057121896791,
+        'metallica-sad-but-true': 4728435161910524,
+        'nightwish-she-is-my-sin': 4759808979624309,
+        'UncleFlexxx - Camry 3': 4779443909721725,
+        'nervy-samyjj-dorogojj-chelovek': 4807432290491694,
+        'Bullet for my valentine - Tears Dont Fall': 4839827084822567,
+        'Иван Дорн - Стыцамэн ': 4867510369428136,
+        'DABRO - Юность': 4871238068911061,
+        'numer-482-dobrijj-ranok-ukrayino': 4970051978746617,
+        'splin-vykhoda-net': 5038241890834722,
+        'fall-out-boy-centuries': 5056321111051028,
+        'SCORPIONS - Still Loving You': 5071710086612195,
+        'Николай Басков - Натуральный блондин': 5108663116294911,
+        'INSTASAMKA - DADADA': 5252356836798459,
+        'bi-2-kompromiss': 5394304695055430,
+        'ЕГОР КРИД - Самая самая': 5480011191373022,
+        'leningrad-v-pitere-pit': 5698654990063436,
+        'Хлеб - Шашлындос': 5798134138655503,
+        'Пуси Джуси - Инстасамка [mp3ten': 6378093715413223,
+        'GONE': 6378426365804057,
+        'Юрий Шатунов - Седая Ночь': 6723715587443644,
+        'twenty-one-pilots-stressed-out': 6896971892489209}
+
+    solution(integrals_solution)

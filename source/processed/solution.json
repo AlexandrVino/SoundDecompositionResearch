@@ -1,0 +1,362 @@
+{
+    "Бетховаен - к Элизе": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Бах - Сюита №2": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Моцарт - Соната №11": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Ludovico Einaudi - Fly": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Бетховен - Лунная Соната": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Фридерик Шопен - Фантазия-экспромт до-диез-минор, арфа": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Петр Ильич Чайковский - Марш Из Балета Щелкунчик": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Вивальди - Времена Года (Зима)": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Моцарт - симфония №40": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Mozart - Маленькая Ночная Серенада Аллегро": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Сергей Прокофьев - Танец рыцарей (Балет Ромео и Джульетта, Картина Вторая)": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Антонио Вивальди - Осень": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Петр Ильич Чайковский - Вальс Цветов": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Антонио Вивальди - Лето": {
+        "classical_music": 62.56,
+        "metal": 13.81,
+        "other": 10.95,
+        "rock": 12.67
+    },
+    "Вагнер - Полет Валькирий": {
+        "classical_music": 41.46,
+        "metal": 21.6,
+        "other": 17.13,
+        "rock": 19.82
+    },
+    "QUEEN - We Will Rock You": {
+        "classical_music": 34.9,
+        "metal": 24.02,
+        "other": 19.05,
+        "rock": 22.04
+    },
+    "OPETH - Benighted": {
+        "classical_music": 34.21,
+        "metal": 24.27,
+        "other": 19.25,
+        "rock": 22.27
+    },
+    "guns-n039-roses-don039t-cry": {
+        "classical_music": 26.64,
+        "metal": 27.06,
+        "other": 21.47,
+        "rock": 24.83
+    },
+    "No": {
+        "classical_music": 25.43,
+        "metal": 27.51,
+        "other": 21.82,
+        "rock": 25.24
+    },
+    "europe-carrie": {
+        "classical_music": 24.93,
+        "metal": 27.69,
+        "other": 21.96,
+        "rock": 25.41
+    },
+    "Guns & Roses - Don't Cry": {
+        "classical_music": 24.61,
+        "metal": 27.81,
+        "other": 22.06,
+        "rock": 25.52
+    },
+    "skid-row-18-and-life": {
+        "classical_music": 21.48,
+        "metal": 28.97,
+        "other": 22.97,
+        "rock": 26.58
+    },
+    "linkin-park-in-the-end": {
+        "classical_music": 18.6,
+        "metal": 30.03,
+        "other": 23.82,
+        "rock": 27.56
+    },
+    "Lady Gaga - Paparazzi": {
+        "classical_music": 17.47,
+        "metal": 30.44,
+        "other": 24.15,
+        "rock": 27.94
+    },
+    "METALLICA - Nothing Else Matters ": {
+        "classical_music": 17.1,
+        "metal": 30.58,
+        "other": 24.26,
+        "rock": 28.06
+    },
+    "imagine-dragons-demons": {
+        "classical_music": 15.97,
+        "metal": 31.0,
+        "other": 24.59,
+        "rock": 28.44
+    },
+    "Lamb Of God - Walk with Me In Hell": {
+        "classical_music": 15.64,
+        "metal": 31.12,
+        "other": 24.68,
+        "rock": 28.56
+    },
+    "ljapis-trubeckojj-voiny-sveta": {
+        "classical_music": 15.27,
+        "metal": 31.26,
+        "other": 24.79,
+        "rock": 28.68
+    },
+    "metallica-the-unforgiven": {
+        "classical_music": 14.09,
+        "metal": 31.69,
+        "other": 25.14,
+        "rock": 29.08
+    },
+    "papa-roach-last-resort": {
+        "classical_music": 14.04,
+        "metal": 31.71,
+        "other": 25.15,
+        "rock": 29.1
+    },
+    "metallica-enter-sandman": {
+        "classical_music": 13.85,
+        "metal": 31.78,
+        "other": 25.21,
+        "rock": 29.16
+    },
+    "Акула - Кислотный Диджей": {
+        "classical_music": 12.94,
+        "metal": 32.12,
+        "other": 25.47,
+        "rock": 29.47
+    },
+    "Паша Сникерс - Не работать это моя работа": {
+        "classical_music": 12.72,
+        "metal": 32.2,
+        "other": 25.54,
+        "rock": 29.55
+    },
+    "Big Baby Tape, kizaru - Million": {
+        "classical_music": 12.7,
+        "metal": 32.2,
+        "other": 25.54,
+        "rock": 29.55
+    },
+    "dire-straits-sultans-of-swing": {
+        "classical_music": 12.67,
+        "metal": 32.22,
+        "other": 25.55,
+        "rock": 29.56
+    },
+    "evanescence-bring-me-to-life": {
+        "classical_music": 12.63,
+        "metal": 32.23,
+        "other": 25.56,
+        "rock": 29.58
+    },
+    "nickelback-burn-it-to-the-ground": {
+        "classical_music": 12.51,
+        "metal": 32.27,
+        "other": 25.6,
+        "rock": 29.62
+    },
+    "Порнофильмы - В диапазоне": {
+        "classical_music": 12.34,
+        "metal": 32.34,
+        "other": 25.65,
+        "rock": 29.68
+    },
+    "metallica-wherever-i-may-roam": {
+        "classical_music": 12.24,
+        "metal": 32.37,
+        "other": 25.68,
+        "rock": 29.71
+    },
+    "metallica-sad-but-true": {
+        "classical_music": 12.24,
+        "metal": 32.37,
+        "other": 25.68,
+        "rock": 29.71
+    },
+    "nightwish-she-is-my-sin": {
+        "classical_music": 12.1,
+        "metal": 32.43,
+        "other": 25.72,
+        "rock": 29.76
+    },
+    "UncleFlexxx - Camry 3": {
+        "classical_music": 12.01,
+        "metal": 32.46,
+        "other": 25.74,
+        "rock": 29.79
+    },
+    "nervy-samyjj-dorogojj-chelovek": {
+        "classical_music": 11.89,
+        "metal": 32.5,
+        "other": 25.78,
+        "rock": 29.83
+    },
+    "Bullet for my valentine - Tears Dont Fall": {
+        "classical_music": 11.75,
+        "metal": 32.56,
+        "other": 25.82,
+        "rock": 29.87
+    },
+    "Иван Дорн - Стыцамэн ": {
+        "classical_music": 11.63,
+        "metal": 32.6,
+        "other": 25.86,
+        "rock": 29.91
+    },
+    "DABRO - Юность": {
+        "classical_music": 11.61,
+        "metal": 32.61,
+        "other": 25.86,
+        "rock": 29.92
+    },
+    "numer-482-dobrijj-ranok-ukrayino": {
+        "classical_music": 11.21,
+        "metal": 32.76,
+        "other": 25.98,
+        "rock": 30.06
+    },
+    "splin-vykhoda-net": {
+        "classical_music": 10.94,
+        "metal": 32.85,
+        "other": 26.06,
+        "rock": 30.15
+    },
+    "fall-out-boy-centuries": {
+        "classical_music": 10.87,
+        "metal": 32.88,
+        "other": 26.08,
+        "rock": 30.17
+    },
+    "SCORPIONS - Still Loving You": {
+        "classical_music": 10.81,
+        "metal": 32.9,
+        "other": 26.1,
+        "rock": 30.19
+    },
+    "Николай Басков - Натуральный блондин": {
+        "classical_music": 10.67,
+        "metal": 32.95,
+        "other": 26.14,
+        "rock": 30.24
+    },
+    "INSTASAMKA - DADADA": {
+        "classical_music": 10.15,
+        "metal": 33.14,
+        "other": 26.29,
+        "rock": 30.41
+    },
+    "bi-2-kompromiss": {
+        "classical_music": 9.68,
+        "metal": 33.32,
+        "other": 26.43,
+        "rock": 30.57
+    },
+    "ЕГОР КРИД - Самая самая": {
+        "classical_music": 9.41,
+        "metal": 33.42,
+        "other": 26.51,
+        "rock": 30.67
+    },
+    "leningrad-v-pitere-pit": {
+        "classical_music": 8.76,
+        "metal": 33.66,
+        "other": 26.7,
+        "rock": 30.89
+    },
+    "Хлеб - Шашлындос": {
+        "classical_music": 8.49,
+        "metal": 33.76,
+        "other": 26.78,
+        "rock": 30.98
+    },
+    "Пуси Джуси - Инстасамка [mp3ten": {
+        "classical_music": 7.27,
+        "metal": 32.91,
+        "other": 27.73,
+        "rock": 32.09
+    },
+    "GONE": {
+        "classical_music": 7.26,
+        "metal": 32.91,
+        "other": 27.74,
+        "rock": 32.09
+    },
+    "Юрий Шатунов - Седая Ночь": {
+        "classical_music": 6.81,
+        "metal": 30.86,
+        "other": 28.9,
+        "rock": 33.43
+    },
+    "twenty-one-pilots-stressed-out": {
+        "classical_music": 6.7,
+        "metal": 30.34,
+        "other": 29.9,
+        "rock": 33.06
+    }
+}

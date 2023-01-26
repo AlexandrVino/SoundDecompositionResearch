@@ -6,6 +6,7 @@ from utils.load import get_file_data, read_file
 import matplotlib.pyplot as plt
 import logging
 
+from utils.matplotlibSetup import setup_matplotlib_font, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config
 
 args = setup_basic_config()
@@ -27,18 +28,22 @@ def build_chart(file_name: str, beautiful_name: str = '') -> None:
     if os.path.exists(f"{PROCESSED}/input_signal/{png_file_name}.png"):
         return
 
+    need = ['wewillrockyou', 'Nothingelsematters', 'dabro', 'Луннаясоната', ]
+    if not any(n.lower() in png_file_name.lower().replace(' ', '') for n in need):
+        return
+
     log.info(f"Get data {file_name}")
     data = get_file_data(file_name)
 
     log.info(f"Build chart {file_name}")
-    plt.plot([abs(val) for val in data])
+    plt.plot([abs(val) / 1000 for val in data])
 
     plt.ylabel('Амплитуда')
     plt.xlabel('Время')
     plt.title(beautiful_name)
 
     log.info(f"Save chart {file_name}")
-    plt.savefig(f"{PROCESSED}/input_signal/{png_file_name}")
+    plt.savefig(f"{PROCESSED}/input_signal/{png_file_name}", transparent=True)
 
     log.info(f"Show chart {file_name}")
     plt.show()
@@ -72,6 +77,8 @@ def build_charts_from_dir(dir_name: str, func: Callable, sep='', file_names: dic
 
 
 if __name__ == '__main__':
+    setup_matplotlib_text_color('white')
+    setup_matplotlib_font(**{'font.size': '13'})
     build_charts_from_dir(
         f"{PROCESSED}/json",
         build_chart,

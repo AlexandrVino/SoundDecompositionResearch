@@ -2,10 +2,8 @@ import json
 
 import numpy as np
 
-from __config__ import PROCESSED, RAW
-from utils.chart_building import build_chart, build_charts_from_dir
+from __config__ import PROCESSED
 from utils.least_squares import least_squares_chart
-from utils.load import get_file_data
 
 
 def prepare_function(function: str) -> str:
@@ -52,48 +50,39 @@ def solve_lp_for_function(function: str, values: np.ndarray, already_solved=Fals
 def solve_for_data():
     with open(f"{PROCESSED}/songs_data.json", encoding='utf8') as input_file:
         data = json.load(input_file)
-        frequencies = np.arange(0, 25000, 1)
-        integ = solve_integral('ax^2 + bx + c')
-        ans = []
-        for key, value in data.items():
-            a, b, c = map(lambda x: str(round(x, 5)), value['least_squares'])
-            curr_integ = integ.replace('a', a).replace('b', b).replace('c', c)
-            ans.append(
-                (
-                    key,
-                    round(solve_lp_for_function(curr_integ, frequencies, already_solved=True))
-                )
-            )
+
+    ans = []
+
+    for key, value in data.items():
+        ans.append(solve_one_integral(
+            key, value['least_squares']
+        ))
 
     return sorted(ans, key=lambda x: x[-1])
 
 
-def return_genres():
-    normalized_genres = {
-        (0, 450): 'classical',
-        (600, 1400): 'rock',
-        (1490, 2160): 'metal',
-        (1450, 2000): 'other',
-    }
-    data = solve_for_data()
-    print(*data, sep='\n')
-    print()
-    print()
-    ans = []
-    for name, value in data:
-        for (tone_mn, tone_mx), genre in normalized_genres.items():
-            if tone_mn < value < tone_mx:
-                ans.append(f"{name} is a composition of {genre}")
-                break
-        else:
-            ans.append(f"{name} is a composition of unknown genre")
+def solve_one_integral(
+        title: str, args: list, frequencies: np.ndarray = np.arange(0, 25000, 1),
+        integral: str = solve_integral('ax^2 + bx + c')):
+    """
+    :param title: title of song
+    :param frequencies: range for directed integral
+    :param integral: integral string
+    :param args: coefficients P(x)
+    :return:
+    """
 
-    return ans
-
-
-def add_musical_composition(filename):
-    least_squares_chart(filename)
-
-
-x = solve_for_data()
-print(x)
+    a, b, c = map(lambda x: str(round(x, 5)), args)
+    curr_integral = integral.replace('a', a).replace('b', b).replace('c', c)
+    return (
+        (
+            title,
+            round(
+                solve_lp_for_function(
+                    curr_integral,
+                    frequencies,
+                    already_solved=True
+                )
+            )
+        )
+    )

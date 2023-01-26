@@ -6,6 +6,7 @@ import logging
 import matplotlib.pyplot as plt
 
 from utils.chart_building import build_charts_from_dir
+from utils.matplotlibSetup import setup_matplotlib_font, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config
 import numpy as np
 import os
@@ -32,6 +33,10 @@ def fourier_transform(file_name: str, beautiful_name: str = ''):
     if os.path.exists(f"{PROCESSED}/fft_signal/{png_file_name}.png"):
         return
 
+    need = ['wewillrockyou', 'Nothingelsematters', 'dabro', 'Луннаясоната', ]
+    if not any(n.lower() in png_file_name.lower().replace(' ', '') for n in need):
+        return
+
     log.info(f"Fourier Transform")
     log.info(f"Get data {file_name}")
 
@@ -53,7 +58,7 @@ def fourier_transform(file_name: str, beautiful_name: str = ''):
     plt.xlabel('Частота')
 
     log.info(f"Save chart {file_name}")
-    plt.savefig(f"{PROCESSED}/fft_signal/{png_file_name}")
+    plt.savefig(f"{PROCESSED}/fft_signal/{png_file_name}", transparent=True)
 
     plt.show()
     plt.clf()
@@ -62,6 +67,9 @@ def fourier_transform(file_name: str, beautiful_name: str = ''):
 
 
 if __name__ == '__main__':
+
+    setup_matplotlib_text_color('white')
+    setup_matplotlib_font(**{'font.size': '13'})
 
     build_charts_from_dir(
         f"{PROCESSED}/json",

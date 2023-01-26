@@ -7,7 +7,7 @@ from typing import Any, List, Tuple
 from pydub import AudioSegment
 
 from __config__ import PROCESSED, RAW
-from utils.write import save_middleware
+from utils.write import prepare_to_write_json, save_middleware
 
 log = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ def load_wav(absolute_path: str) -> List[Any]:
     Function, that loads *.wav files
     """
 
-    log.info(f"Loading %s" % absolute_path)
+    log.info(f"Loading %s" % str(absolute_path)[str(absolute_path).find('source'):])
     return AudioSegment.from_wav(absolute_path)
 
 
@@ -59,7 +59,7 @@ def load_mp3(absolute_path: str) -> List[Any]:
     Function, that loads *.mp3 files
     """
 
-    log.info(f"Loading %s" % absolute_path)
+    log.info(f"Loading %s" % str(absolute_path)[str(absolute_path).find('source'):])
     return AudioSegment.from_mp3(absolute_path)
 
 
@@ -71,7 +71,7 @@ def load_txt(absolute_path: str) -> List[Any]:
     Function, that loads *.txt files
     """
 
-    log.info(f"Loading %s" % absolute_path)
+    log.info(f"Loading %s" % str(absolute_path)[str(absolute_path).find('source'):])
     with open(absolute_path, 'r', encoding='utf8') as input_file:
         return prepare_to_load(json.load(input_file))
 
@@ -83,7 +83,7 @@ def load_json(absolute_path: str) -> List[Any]:
 
     Function, that loads *.txt files
     """
-    log.info(f"Loading %s" % absolute_path)
+    log.info(f"Loading %s" % str(absolute_path)[str(absolute_path).find('source'):])
     with open(absolute_path, 'r', encoding='utf8') as input_file:
         return prepare_to_load(json.load(input_file))
 
@@ -177,7 +177,6 @@ def read_file(input_file: str):
         # save_middleware(array_of_samples, 'txt', file_name=new_file_name + '.txt')
     else:
         pass
-        # print(data)
 
 
 def get_file_data(input_file: str):

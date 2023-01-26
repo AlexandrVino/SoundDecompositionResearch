@@ -6,7 +6,7 @@ from typing import Any, List, Tuple
 
 from pydub import AudioSegment
 
-from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+from __config__ import PROCESSED, RAW
 from utils.write import save_middleware
 
 log = logging.getLogger(__name__)
@@ -100,7 +100,7 @@ def load_middleware(file_name: str) -> Tuple[List[int], str] | Tuple[AudioSegmen
 
     read_func: dict = {
         'raw': [
-            PROJECT_SOURCE_RAW,
+            RAW,
             {
                 'wav': load_wav,
                 'mp3': load_mp3
@@ -108,7 +108,7 @@ def load_middleware(file_name: str) -> Tuple[List[int], str] | Tuple[AudioSegmen
         ],
 
         'processed': [
-            PROJECT_SOURCE_PROCESSED,
+            PROCESSED,
             {
                 'json': load_json,
                 'txt': load_txt,

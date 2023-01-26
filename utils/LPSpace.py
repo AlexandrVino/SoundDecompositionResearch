@@ -2,7 +2,7 @@ import json
 
 import numpy as np
 
-from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+from __config__ import PROCESSED, RAW
 from utils.chart_building import build_chart, build_charts_from_dir
 from utils.least_squares import least_squares_chart
 from utils.load import get_file_data
@@ -50,21 +50,21 @@ def solve_lp_for_function(function: str, values: np.ndarray, already_solved=Fals
 
 
 def solve_for_data():
-    with open(f"{PROJECT_SOURCE_PROCESSED}/songs_data.json", encoding='utf8') as input_file:
+    with open(f"{PROCESSED}/songs_data.json", encoding='utf8') as input_file:
         data = json.load(input_file)
         frequencies = np.arange(0, 25000, 1)
         integ = solve_integral('ax^2 + bx + c')
         ans = []
         for key, value in data.items():
-            c, b, a = map(lambda x: str(round(x, 5)), value['least_squares'])
+            a, b, c = map(lambda x: str(round(x, 5)), value['least_squares'])
             curr_integ = integ.replace('a', a).replace('b', b).replace('c', c)
             ans.append(
                 (
                     key,
-                    round(solve_lp_for_function(curr_integ, frequencies, already_solved=True) / 1e17)
+                    round(solve_lp_for_function(curr_integ, frequencies, already_solved=True))
                 )
             )
-            break
+
     return sorted(ans, key=lambda x: x[-1])
 
 

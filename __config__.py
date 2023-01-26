@@ -2,6 +2,6 @@ from pathlib import Path
 
 # Setup paths variables
 PROJECT_PATH = Path(__file__).parent.resolve()
-PROJECT_SOURCE_PATH = Path(f'{PROJECT_PATH}\\source').resolve()
-PROJECT_SOURCE_RAW = Path(f'{PROJECT_SOURCE_PATH}\\raw').resolve()
-PROJECT_SOURCE_PROCESSED = Path(f'{PROJECT_SOURCE_PATH}\\processed').resolve()
+SOURCE_PATH = Path(f'{PROJECT_PATH}\\source').resolve()
+RAW = Path(f'{SOURCE_PATH}\\raw').resolve()
+PROCESSED = Path(f'{SOURCE_PATH}\\processed').resolve()

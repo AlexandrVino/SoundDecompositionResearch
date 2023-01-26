@@ -4,7 +4,7 @@ import os
 
 from typing import Iterable, List
 
-from __config__ import PROJECT_SOURCE_PROCESSED
+from __config__ import PROCESSED
 
 log = logging.getLogger(__name__)
 
@@ -100,9 +100,9 @@ def save_middleware(data: Iterable, file_type: str, file_name: str = None):
     }
 
     if not file_name:
-        file_name = f'file_%i.{file_type}' % len(os.listdir(f'{PROJECT_SOURCE_PROCESSED}\\{file_type}\\'))
+        file_name = f'file_%i.{file_type}' % len(os.listdir(f'{PROCESSED}\\{file_type}\\'))
 
-    absolute_path: str = f'{PROJECT_SOURCE_PROCESSED}\\{file_type}\\{file_name}'
+    absolute_path: str = f'{PROCESSED}\\{file_type}\\{file_name}'
 
     func = write_func.get(file_type)
     if not func:

@@ -1,7 +1,7 @@
 import os
 from typing import Callable
 
-from __config__ import PROJECT_SOURCE_PATH, PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+from __config__ import SOURCE_PATH, PROCESSED, RAW
 from utils.load import get_file_data, read_file
 import matplotlib.pyplot as plt
 import logging
@@ -24,7 +24,7 @@ def build_chart(file_name: str, beautiful_name: str = '') -> None:
     png_file_name = '/'.join([file_name.split('.')[0].split('/')[-2], beautiful_name]) \
         if beautiful_name else '/'.join(file_name.split('.')[0].split('/')[-2::])
 
-    if os.path.exists(f"{PROJECT_SOURCE_PROCESSED}/input_signal/{png_file_name}.png"):
+    if os.path.exists(f"{PROCESSED}/input_signal/{png_file_name}.png"):
         return
 
     log.info(f"Get data {file_name}")
@@ -38,7 +38,7 @@ def build_chart(file_name: str, beautiful_name: str = '') -> None:
     plt.title(beautiful_name)
 
     log.info(f"Save chart {file_name}")
-    plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/input_signal/{png_file_name}")
+    plt.savefig(f"{PROCESSED}/input_signal/{png_file_name}")
 
     log.info(f"Show chart {file_name}")
     plt.show()
@@ -73,7 +73,7 @@ def build_charts_from_dir(dir_name: str, func: Callable, sep='', file_names: dic
 
 if __name__ == '__main__':
     build_charts_from_dir(
-        f"{PROJECT_SOURCE_PROCESSED}/json",
+        f"{PROCESSED}/json",
         build_chart,
-        file_names=get_file_data(f"{PROJECT_SOURCE_RAW}/songs_names.json")
+        file_names=get_file_data(f"{RAW}/songs_names.json")
     )

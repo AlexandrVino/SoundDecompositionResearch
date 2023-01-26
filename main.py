@@ -1,4 +1,4 @@
-from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+from __config__ import PROCESSED, RAW
 from utils.load import read_file, read_files_from_dir
 from utils.my_argparse import setup_basic_config
 
@@ -16,7 +16,7 @@ def main():
     if '.' in input_file:
         read_file(input_file)
     else:
-        root = PROJECT_SOURCE_RAW if input_file in ('mp3', 'wav') else PROJECT_SOURCE_PROCESSED
+        root = RAW if input_file in ('mp3', 'wav') else PROCESSED
         read_files_from_dir(f'{root}/{input_file}/')
 
     # Don't print this because it's pass a lot of time to write data in console

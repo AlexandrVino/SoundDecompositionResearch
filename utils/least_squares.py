@@ -6,7 +6,7 @@ from scipy.fft import fft, fftfreq
 import matplotlib.pyplot as plt
 import numpy as np
 
-from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+from __config__ import PROCESSED, RAW
 from utils.chart_building import build_charts_from_dir
 from utils.load import get_file_data
 
@@ -34,7 +34,7 @@ def least_squares_chart(filename, beautiful_name=''):
 
     data_filename = png_file_name.split('.')[0].split('/')[1]
 
-    if os.path.exists(f"{PROJECT_SOURCE_PROCESSED}/least_squares/{png_file_name}.png"):
+    if os.path.exists(f"{PROCESSED}/least_squares/{png_file_name}.png"):
         # return
         pass
     #
@@ -90,7 +90,7 @@ def least_squares_chart(filename, beautiful_name=''):
     plt.xlabel('Частота')
 
     log.info(f"Save chart {filename}")
-    plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/least_squares/{png_file_name}")
+    plt.savefig(f"{PROCESSED}/least_squares/{png_file_name}")
 
     plt.show()
     plt.clf()
@@ -101,7 +101,7 @@ def least_squares_chart(filename, beautiful_name=''):
 if __name__ == '__main__':
     # least_squares_chart("classical_music/БЕТХОВЕН Лунная Соната.json")
     build_charts_from_dir(
-        f"{PROJECT_SOURCE_PROCESSED}/json",
+        f"{PROCESSED}/json",
         least_squares_chart,
-        file_names=get_file_data(f"{PROJECT_SOURCE_RAW}/songs_names.json")
+        file_names=get_file_data(f"{RAW}/songs_names.json")
     )

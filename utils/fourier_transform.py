@@ -1,6 +1,6 @@
 from scipy.fft import fft, fftfreq
 
-from __config__ import PROJECT_SOURCE_PATH, PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+from __config__ import SOURCE_PATH, PROCESSED, RAW
 from load import get_file_data
 import logging
 import matplotlib.pyplot as plt
@@ -29,7 +29,7 @@ def fourier_transform(file_name: str, beautiful_name: str = ''):
     png_file_name = '/'.join([file_name.split('.')[0].split('/')[-2], beautiful_name]) \
         if beautiful_name else '/'.join(file_name.split('.')[0].split('/')[-2::])
 
-    if os.path.exists(f"{PROJECT_SOURCE_PROCESSED}/fft_signal/{png_file_name}.png"):
+    if os.path.exists(f"{PROCESSED}/fft_signal/{png_file_name}.png"):
         return
 
     log.info(f"Fourier Transform")
@@ -53,7 +53,7 @@ def fourier_transform(file_name: str, beautiful_name: str = ''):
     plt.xlabel('Частота')
 
     log.info(f"Save chart {file_name}")
-    plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/fft_signal/{png_file_name}")
+    plt.savefig(f"{PROCESSED}/fft_signal/{png_file_name}")
 
     plt.show()
     plt.clf()
@@ -64,7 +64,7 @@ def fourier_transform(file_name: str, beautiful_name: str = ''):
 if __name__ == '__main__':
 
     build_charts_from_dir(
-        f"{PROJECT_SOURCE_PROCESSED}/json",
+        f"{PROCESSED}/json",
         fourier_transform,
-        file_names=get_file_data(f"{PROJECT_SOURCE_RAW}/songs_names.json")
+        file_names=get_file_data(f"{RAW}/songs_names.json")
     )

@@ -6,7 +6,7 @@ from scipy.fft import fft, fftfreq
 import matplotlib.pyplot as plt
 import numpy as np
 
-from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+from __config__ import PROCESSED, RAW
 from utils.chart_building import build_charts_from_dir
 from utils.load import get_file_data
 
@@ -38,7 +38,7 @@ def least_squares_chart(filename, beautiful_name=''):
     #     # return
     #     pass
     #
-    data = json.load(open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'r', encoding='utf-8'))
+    data = json.load(open(f'{PROCESSED}/songs_data.json', 'r', encoding='utf-8'))
     if data_filename in data:
         log.info(f'Skip {filename}')
         return
@@ -69,10 +69,10 @@ def least_squares_chart(filename, beautiful_name=''):
     yn = f(x, *c)
 
     log.info(f"Save data {filename}")
-    with open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'r', encoding='utf-8') as file:
+    with open(f'{PROCESSED}/songs_data.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
     data[data_filename] = {'least_squares': list(c)}
-    with open(f'{PROJECT_SOURCE_PROCESSED}/songs_data.json', 'w', encoding='utf-8') as file:
+    with open(f'{PROCESSED}/songs_data.json', 'w', encoding='utf-8') as file:
         json.dump(data, file, indent=4, ensure_ascii=False)
     # return
 
@@ -85,7 +85,7 @@ def least_squares_chart(filename, beautiful_name=''):
     plt.xlabel('Частота')
 
     log.info(f"Save chart {filename}")
-    plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/least_squares/{png_file_name}")
+    plt.savefig(f"{PROCESSED}/least_squares/{png_file_name}")
 
     # plt.show()
     plt.clf()
@@ -95,7 +95,7 @@ def least_squares_chart(filename, beautiful_name=''):
 
 if __name__ == '__main__':
     build_charts_from_dir(
-        f"{PROJECT_SOURCE_PROCESSED}/json",
+        f"{PROCESSED}/json",
         least_squares_chart,
-        file_names=get_file_data(f"{PROJECT_SOURCE_RAW}/songs_names.json")
+        file_names=get_file_data(f"{RAW}/songs_names.json")
     )

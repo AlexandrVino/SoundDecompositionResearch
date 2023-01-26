@@ -1,34 +1,36 @@
 import json
+import logging
 import os
 
+import matplotlib.pyplot as plt
 import numpy as np
 
-from __config__ import PROJECT_SOURCE_PROCESSED, PROJECT_SOURCE_RAW
+from __config__ import PROCESSED, RAW
 from utils.load import get_file_data
-import matplotlib.pyplot as plt
-import logging
-import matplotlib.patches as mpatches
-
+from utils.matplotlibSetup import setup_matplotlib_font, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config
 
 args = setup_basic_config()
 log = logging.getLogger(__name__)
 
-colors = {
+setup_matplotlib_text_color('white')
+setup_matplotlib_font(**{'font.size': '13'})
+
+COLORS = {
     'classical_music': '#21dec1',
     'metal': '#882bc3',
     'other': '#ff0000',
     'rock': '#0000fa'
 }
 
-names = {
+NAMES = {
     'classical_music': 'Классика',
     'metal': 'Метал',
     'other': 'Поп',
     'rock': 'Рок'
 }
 
-songs_data = get_file_data(f"{PROJECT_SOURCE_PROCESSED}/songs_data.json")
+songs_data = get_file_data(f"{PROCESSED}/songs_data.json")
 
 
 def f(x: int, a: list[int]) -> int:
@@ -39,12 +41,12 @@ def find_song_names(directory='all'):
     """
     :param directory: all / each / directory_name
     """
-    songs_names = get_file_data(f"{PROJECT_SOURCE_RAW}/songs_names.json")
+    songs_names = get_file_data(f"{RAW}/songs_names.json")
     if 'Ludovico Einaudi - Fly (megapesni' not in songs_names:
         print('lol')
     data = list()
 
-    dir_name = f"{PROJECT_SOURCE_PROCESSED}/json"
+    dir_name = f"{PROCESSED}/json"
     for dir in os.listdir(dir_name):
         if dir.endswith('.py'):
             continue
@@ -64,17 +66,22 @@ def find_song_names(directory='all'):
                 data.append([file, name, dir])
             else:
                 break
+
     already = []
     average = {}
-    print(type(average))
+
     fig, ax = plt.subplots()
     for elem in data:
         build_one_chart(*elem, ax, already, average)
+
+    ax.tick_params(color='white', labelcolor='white')
+    for spine in ax.spines.values():
+        spine.set_edgecolor('white')
     ax.legend()
 
     plt.ylabel('Амплитуда')
     plt.xlabel('Частота')
-    plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/least_squares/compare_charts_1.png")
+    plt.savefig(f"{PROCESSED}/least_squares/compare_charts_1.png", transparent=True)
     plt.show()
     return average
 
@@ -87,70 +94,82 @@ def build_one_chart(file_name, beautiful_name, origin, ax, already, average):
         return -1
     a = songs_data[beautiful_name]['least_squares']
 
-    kwargs = dict(label=origin)
+    kwargs = dict(label=NAMES[origin])
     if kwargs['label'] in already:
         del kwargs['label']
     else:
-        already.append(origin)
+        already.append(NAMES[origin])
 
     y = [f(x, a) for x in range(25000)]
     if not average.get(origin):
         average[origin] = []
     average[origin].append(sum(y))
 
-    ax.plot(y, colors[origin], **kwargs)
+    ax.plot(y, COLORS[origin], **kwargs)
 
 
-def solve(current: float, name):
+def solve(current: float, title):
     """
     :param current: current value of integral
-    :param name: Title of composition
+    :param title: Title of composition
     :return:
     """
 
-    with open(f'{PROJECT_SOURCE_PROCESSED}/integrals.json') as input_file:
+    with open(f'{PROCESSED}/integrals.json') as input_file:
         genres = json.load(input_file)
 
-    with open(f'{PROJECT_SOURCE_PROCESSED}/solution.json', encoding='utf8') as input_file:
+    with open(f'{PROCESSED}/solution.json', encoding='utf8') as input_file:
         solution = json.load(input_file)
 
     for key, value in genres.items():
         mn, mx = sorted([value, current])
-        if not solution.get(name):
-            solution[name] = {}
-        solution[name][key] = round(mn / mx * 100, 2)
+        if not solution.get(title):
+            solution[title] = {}
+        solution[title][key] = round(mn / mx * 100, 2)
 
-    sm = sum(solution[name].values())
-    for key, value in solution[name].items():
-        solution[name][key] = round(value / sm * 100, 2)
+    sm = sum(solution[title].values())
+    for key, value in solution[title].items():
+        solution[title][key] = round(value / sm * 100, 2)
 
-    with open(f'{PROJECT_SOURCE_PROCESSED}/solution.json', 'w', encoding='utf8') as output_file:
+    with open(f'{PROCESSED}/solution.json', 'w', encoding='utf8') as output_file:
         json.dump(solution, output_file, indent=4, ensure_ascii=False)
 
-    return ''
+
+def plot_average_integrals():
+    plt.clf()
+
+    average = list(map(lambda x: (x[0], sorted(x[1])), find_song_names('all').items()))
+    data = []
+    for genre, item_data in average:
+        n = len(item_data)
+        indexes = [n // 2, n // 2 + 1] if n % 2 == 0 else [n // 2]
+
+        data.append(
+            [
+                round(sum(map(lambda x: item_data[x], indexes)) / len(indexes), 5),
+                NAMES[genre],
+                COLORS[genre]
+            ]
+        )
+    print(data)
+    items_data = np.array(data)
+    fig, ax = plt.subplots()
+
+    for (data, name, color) in items_data:
+        ax.bar([name], [float(data)], color=color, label=name)
+
+    ax.tick_params(color='white', labelcolor='white')
+    for spine in ax.spines.values():
+        spine.set_edgecolor('white')
+
+    ax.legend()
+    ax.set_ylabel('Значение Интегралов')
+    ax.legend()
+
+    plt.ylim(0, max(np.array(items_data[:, 0], dtype=np.float)) * 1.3)
+    plt.savefig(f"{PROCESSED}/least_squares/integrals.png", transparent=True)
+    plt.show()
 
 
 if __name__ == '__main__':
-    plt.clf()
-    average = list(map(lambda x: (x[0], sorted(x[1])), find_song_names('all').items()))
-    data = []
-    for i, (name, item_data) in enumerate(average):
-        n = len(item_data)
-        indexes = [n // 2, n // 2 + 1] if n % 2 == 0 else [n // 2]
-        data.append(
-            [float(round(sum(map(lambda x: item_data[x], indexes)) / len(indexes), 5)), names[name], colors[name]])
-
-    items_data = np.array(data)
-    items_names = items_data[:, 1]
-    items_colors = np.array(items_data[:, 2])
-    items_data = np.array(items_data[:, 0], dtype=np.float64)
-
-    fig, ax = plt.subplots()
-
-    for name, data, color in zip(items_names, items_data, items_colors):
-        ax.bar([name], [data], color=color, label=name)
-    ax.legend()
-    ax.set_ylabel('Значение Интегралов')
-    plt.ylim(0, max(items_data) + max(items_data) * 0.3)
-    plt.savefig(f"{PROJECT_SOURCE_PROCESSED}/least_squares/integrals.png")
-    plt.show()
+    plot_average_integrals()

@@ -7,7 +7,7 @@ from typing import Any, List, Tuple
 from pydub import AudioSegment
 
 from __config__ import PROCESSED, RAW
-from utils.write import prepare_to_write_json, save_middleware
+from utils.files.write import save_middleware
 
 log = logging.getLogger(__name__)
 

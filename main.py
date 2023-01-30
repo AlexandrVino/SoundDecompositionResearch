@@ -1,5 +1,5 @@
 from __config__ import PROCESSED, RAW
-from utils.load import read_file, read_files_from_dir
+from utils.files.load import read_file, read_files_from_dir
 from utils.my_argparse import setup_basic_config
 
 

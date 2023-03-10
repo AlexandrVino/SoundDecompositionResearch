@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 from __config__ import PROCESSED, RAW
 from utils.charts.config import COLORS, NAMES, SONGS_DATA
+from utils.charts.integrals import solve_integrate, solve_one_integral
 from utils.files.load import get_file_data
 from utils.matplotlibSetup import setup_matplotlib, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config
@@ -21,6 +22,7 @@ def find_song_names(directory='all'):
     """
     :param directory: all / each / directory_name
     """
+
     songs_names = get_file_data(f"{RAW}/songs_names.json")
     data = list()
 
@@ -67,9 +69,9 @@ def find_song_names(directory='all'):
 
 def build_one_chart(
         file_name: str, beautiful_name: str, origin: str, ax: plt.Axes,
-        already: list, average: dict, integrals: dict):
+        already: list, average: dict, integrals: dict
+):
     log.info(f'Build {file_name}')
-
     if beautiful_name not in SONGS_DATA:
         log.info(f'No file data {file_name}')
         return -1
@@ -80,10 +82,9 @@ def build_one_chart(
         kwargs = dict(label=NAMES[origin])
         already.append(NAMES[origin])
 
-    if not average.get(origin):
-        average[origin] = []
+    average[origin] = average.get(origin, [])
+    average[origin].append((beautiful_name, solve_integrate(coefficients)))
 
-    average[origin].append(solve_one_integral(beautiful_name, coefficients)[1])
     integrals[beautiful_name] = average[origin][-1]
 
     ax.plot([f(x, coefficients) for x in range(25000)], COLORS[origin], **kwargs)

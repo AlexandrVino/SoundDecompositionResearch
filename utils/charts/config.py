@@ -2,16 +2,28 @@ from __config__ import PROCESSED
 from utils.files.load import get_file_data
 
 COLORS = {
-    'classical_music': '#21dec1',
+    'blues': '#21dec1',
+    'classical': '#ffe20f',
+    'country': '#ffe20f',
+    'disco': '#ffe20f',
+    'hiphop': '#ffe20f',
+    'jazz': '#ffe20f',
     'metal': '#882bc3',
-    'other': '#ff0000',
+    'pop': '#ff0000',
+    'reggae': '#ff0000',
     'rock': '#0000fa'
 }
 
 NAMES = {
-    'classical_music': 'Классика',
+    'blues': 'Блюз',
+    'classical': 'Классика',
+    'country': 'Кантри',
+    'disco': 'Диско',
+    'hiphop': 'Хип-Хоп',
+    'jazz': 'Джаз',
     'metal': 'Метал',
-    'other': 'Поп',
+    'pop': 'Поп',
+    'reggae': 'Регги',
     'rock': 'Рок'
 }
 

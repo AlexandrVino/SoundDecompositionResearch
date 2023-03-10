@@ -2,27 +2,18 @@ import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.optimize import least_squares
 
 from __config__ import PROCESSED, RAW
-from utils.charts.config import SAMPLE_RATE
-
-from utils.charts.fourier_transform import solve_fourier_transform
-from utils.charts.main import build_charts_from_dir, get_png_file_name, need_to_build
-from utils.files.load import get_file_data
+from utils.__main__ import update_config
+from utils.math_transformations.least_squares import solve_least_squares_chart
+from utils.charts.__main__ import build_charts_from_dir, get_png_file_name, need_to_build
 from utils.matplotlibSetup import setup_matplotlib, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config
 
 args = setup_basic_config()
 log = logging.getLogger(__name__)
-
-
-def avg(data):
-    return sum(data) / len(data)
-
-
-def fun(a, x, y):
-    return a[0] + a[1] * x + a[2] * x ** 2 - y
+solution = {}
+config_function = update_config()
 
 
 def least_squares_chart(file_name, beautiful_name='', necessary=None):
@@ -34,30 +25,19 @@ def least_squares_chart(file_name, beautiful_name='', necessary=None):
     """
 
     png_file_name = get_png_file_name(file_name, beautiful_name)
-    if not need_to_build(png_file_name, necessary):
-        return
+    # if not need_to_build(png_file_name, necessary):
+    #     return
 
     log.info(f"Least Squares: Starting build {png_file_name}")
 
-    x, y = solve_fourier_transform(file_name)
-    x, y = (
-        np.clip(x, 0, SAMPLE_RATE // 2 + 1),
-        np.clip(y, 0, 2.5 * 10 ** 7)
+    (x, y), coefficients = solve_least_squares_chart(file_name)
+
+    config_function(
+        png_file_name, least_square=coefficients.x, write=True
     )
+    return
 
-    step = 100
-    x_1, y_1 = [], []
-    for i in range(step, len(x), step):
-        x_1.append(max(x[i - step:i]))
-        y_1.append(max(y[i - step:i]))
-
-    x, y = np.array(x_1), np.array(y_1)
-    a0 = np.array([0, 0, 0])
-
-    log.info(f"Call least_squares {png_file_name}")
-    res_lsq = least_squares(fun, x0=a0, args=(x, y))
-
-    f = lambda x: sum([u * v for u, v in zip(res_lsq.x, [1, x, x ** 2])])
+    f = lambda obj: sum([u * v for u, v in zip(coefficients.x, [1, obj, obj ** 2])])
 
     x_p = np.linspace(min(x), max(x), 50)
     y_p = f(x_p)
@@ -83,7 +63,7 @@ if __name__ == '__main__':
     setup_matplotlib(**{'font.size': '13'})
 
     build_charts_from_dir(
-        f"{PROCESSED}/json",
+        f"{RAW}/wav",
         least_squares_chart,
-        file_names=get_file_data(f"{RAW}/songs_names.json")
+        # file_names=get_file_data(f"{RAW}/songs_names.json")
     )

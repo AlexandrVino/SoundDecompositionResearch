@@ -3,7 +3,7 @@ import logging
 import matplotlib.pyplot as plt
 
 from __config__ import PROCESSED, RAW
-from utils.charts.main import build_charts_from_dir, get_png_file_name, need_to_build
+from utils.charts.__main__ import build_charts_from_dir, get_png_file_name, need_to_build
 from utils.files.load import get_file_data
 from utils.matplotlibSetup import setup_matplotlib, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config

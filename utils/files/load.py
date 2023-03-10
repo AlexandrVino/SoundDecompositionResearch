@@ -2,7 +2,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Any, List, Tuple
+from typing import Any, Iterable, List, Tuple
 
 from pydub import AudioSegment
 
@@ -179,6 +179,19 @@ def read_file(input_file: str):
         pass
 
 
+def covert_to_python_classes(obj: Iterable | int) -> List | int:
+    """
+    :param obj: Iterable obj
+    :return: data as List obj to write in json
+
+    Function, convert different iterable types to json serializable
+    """
+
+    if isinstance(obj, Iterable):
+        return list(map(lambda x: covert_to_python_classes(x) if isinstance(x, Iterable) else int(x), obj))
+    return int(obj)
+
+
 def get_file_data(input_file: str):
     """
     :param input_file: path to file
@@ -186,6 +199,8 @@ def get_file_data(input_file: str):
     """
 
     data, _ = load_middleware(input_file)
-    if data is AudioSegment:
-        return data.get_array_of_samples()
+
+    if type(data) is AudioSegment:
+        return covert_to_python_classes(data.get_array_of_samples())
+
     return data

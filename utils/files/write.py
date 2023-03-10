@@ -2,7 +2,7 @@ import json
 import logging
 import os
 
-from typing import Iterable, List
+from typing import Iterable, List, Dict
 
 from __config__ import PROCESSED
 
@@ -10,16 +10,15 @@ log = logging.getLogger(__name__)
 
 
 def create_dirs(path: str) -> None:
-    '''
-
+    """
     :param path:
     :return:
-    '''
+    """
 
     os.makedirs(path)
 
 
-def prepare_to_write_json(obj: Iterable | int) -> List | str:
+def prepare_to_write_json(obj: Iterable | int) -> Dict | List | str:
     """
     :param obj: Iterable obj
     :return: data as List obj to write in json
@@ -27,8 +26,10 @@ def prepare_to_write_json(obj: Iterable | int) -> List | str:
     Function, convert different iterable types to json serializable
     """
 
-    if isinstance(obj, Iterable):
-        return list(map(lambda x: prepare_to_write_json(x) if isinstance(x, Iterable) else str(x), obj))
+    if isinstance(obj, Dict):
+        return {prepare_to_write_json(key): prepare_to_write_json(value) for key, value in obj.items()}
+    elif isinstance(obj, Iterable):
+        return list(map(lambda x: prepare_to_write_json(x), obj))
     return str(obj)
 
 
@@ -58,7 +59,8 @@ def write_data_json(data: Iterable, absolute_path: str = None) -> None:
         return
 
     log.info(f"Writing %s" % absolute_path)
-    path = '/'.join(absolute_path.split('/')[:-1])
+    path = '/'.join(absolute_path.split('\\')[:-1])
+
     if not os.path.exists(path):
         create_dirs(path)
 
@@ -110,6 +112,5 @@ def save_middleware(data: Iterable, file_type: str, file_name: str = None):
             f'Unknown file type "{file_type}" '
             f'(file types must be one of ({", ".join(f".{key}" for key in write_func.keys())})'
         )
-
     func(data, absolute_path)
     log.info(f"End of data writing")

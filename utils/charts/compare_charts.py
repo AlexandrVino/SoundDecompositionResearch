@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 from __config__ import PROCESSED, RAW
 from utils.charts.config import COLORS, NAMES, SONGS_DATA
-from utils.charts.integrals import solve_integrate, solve_one_integral
 from utils.files.load import get_file_data
+from utils.math_transformations.integrals import solve_integrate
 from utils.matplotlibSetup import setup_matplotlib, setup_matplotlib_text_color
 from utils.my_argparse import setup_basic_config
 

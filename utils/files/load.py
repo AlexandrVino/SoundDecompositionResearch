@@ -2,7 +2,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Any, Iterable, List, Tuple
+from typing import Any, Dict, Iterable, List, Tuple
 
 from pydub import AudioSegment
 
@@ -32,11 +32,11 @@ def prepare_to_load(obj: str | List[Any]) -> List | Any:
     (The json format doesn't support int16, so it is written as str)
     """
 
-    if type(obj) is dict:
-        return obj
+    if isinstance(obj, Dict):
+        return {key: prepare_to_load(value) for key, value in obj.items()}
     if isinstance(obj, List):
         return list(map(lambda x: prepare_to_load(x), obj))
-    return int(obj)
+    return float(obj)
 
 
 def load_wav(absolute_path: str) -> List[Any]:

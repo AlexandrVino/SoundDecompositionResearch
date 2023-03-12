@@ -25,7 +25,8 @@ def prepare_to_write_json(obj: Iterable | int) -> Dict | List | str:
 
     Function, convert different iterable types to json serializable
     """
-
+    if isinstance(obj, str):
+        return obj
     if isinstance(obj, Dict):
         return {prepare_to_write_json(key): prepare_to_write_json(value) for key, value in obj.items()}
     elif isinstance(obj, Iterable):
@@ -55,8 +56,8 @@ def write_data_json(data: Iterable, absolute_path: str = None) -> None:
     Function, that choose upload function according to the file type
     """
 
-    if os.path.exists(absolute_path):
-        return
+    #if os.path.exists(absolute_path):
+    #    return
 
     log.info(f"Writing %s" % absolute_path)
     path = '/'.join(absolute_path.split('\\')[:-1])
@@ -65,7 +66,7 @@ def write_data_json(data: Iterable, absolute_path: str = None) -> None:
         create_dirs(path)
 
     with open(absolute_path, 'w') as write_file:
-        json.dump(prepare_to_write_json(data), write_file, ensure_ascii=False)
+        json.dump(prepare_to_write_json(data), write_file, indent=4, ensure_ascii=False)
     log.info(f"Wrote successful")
 
 

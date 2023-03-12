@@ -5,6 +5,7 @@ import numpy as np
 
 from __config__ import PROCESSED, RAW
 from utils.__main__ import update_config
+from utils.math_transformations.integrals import f
 from utils.math_transformations.least_squares import solve_least_squares_chart
 from utils.charts.__main__ import build_charts_from_dir, get_png_file_name, need_to_build
 from utils.matplotlibSetup import setup_matplotlib, setup_matplotlib_text_color
@@ -30,30 +31,28 @@ def least_squares_chart(file_name, beautiful_name='', necessary=None):
 
     log.info(f"Least Squares: Starting build {png_file_name}")
 
-    (x, y), coefficients = solve_least_squares_chart(file_name)
+    (x, y, yn), coefficients = solve_least_squares_chart(file_name)
 
     config_function(
-        png_file_name, least_square=coefficients.x, write=True
+        png_file_name, least_square=coefficients, write=True
     )
     return
 
-    f = lambda obj: sum([u * v for u, v in zip(coefficients.x, [1, obj, obj ** 2])])
-
-    x_p = np.linspace(min(x), max(x), 50)
-    y_p = f(x_p)
+    log.info(f"Build chart {file_name}")
     plt.plot(x, y)
-    plt.plot(x_p, y_p, 'r')
+    plt.plot(x, yn, 'r')
 
     plt.title(beautiful_name)
     plt.ylabel('Амплитуда')
     plt.xlabel('Частота')
 
-    plt.savefig(f"{PROCESSED}/least_squares/{png_file_name}", transparent=True)
+    log.info(f"Save chart {file_name}")
+    plt.savefig(f"{PROCESSED}/least_squares/{png_file_name}")
 
-    plt.show()
+    # plt.show()
     plt.clf()
 
-    log.info(f"End {png_file_name}")
+    log.info(f"End {file_name}")
 
 
 if __name__ == '__main__':

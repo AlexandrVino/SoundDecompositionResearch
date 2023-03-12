@@ -1,5 +1,6 @@
 import logging
 
+import numpy as np
 from scipy.fft import fft, fftfreq
 
 from utils.charts.config import SAMPLE_RATE
@@ -14,6 +15,6 @@ def solve_fourier_transform(file_name):
     normalized_tone = get_file_data(file_name)
 
     return (
-        fftfreq(len(normalized_tone), 1 / SAMPLE_RATE),
-        fft(normalized_tone)
+        np.clip(fftfreq(len(normalized_tone), 1 / SAMPLE_RATE), 0, SAMPLE_RATE // 2 + 1),
+        np.clip(np.abs(fft(normalized_tone)), 0, 2.5 * 10 ** 7)
     )

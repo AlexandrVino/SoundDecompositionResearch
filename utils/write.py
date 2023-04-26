@@ -10,11 +10,10 @@ log = logging.getLogger(__name__)
 
 
 def create_dirs(path: str) -> None:
-    '''
-
+    """
     :param path:
     :return:
-    '''
+    """
 
     os.makedirs(path)
 

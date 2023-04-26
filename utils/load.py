@@ -134,7 +134,6 @@ def load_middleware(file_name: str) -> Tuple[List[int], str] | Tuple[AudioSegmen
             f'Unknown file type "{file_type}" '
             f'(file types must be one of ({", ".join(f".{key}" for key in load_type_func.keys())})'
         )
-
     val = func(absolute_path)
     log.info(f"End loading data")
 

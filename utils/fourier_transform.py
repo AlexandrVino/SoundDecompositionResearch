@@ -50,8 +50,8 @@ def fourier_transform(file_name: str, beautiful_name: str = ''):
     xf = fftfreq(n, 1 / sample_rate)
 
     log.info(f"Build chart {file_name}")
-    # plt.plot(np.clip(xf, 0, sample_rate // 2 + 1), np.clip(np.abs(yf), 0, 2.5 * 10 ** 7))
-    plt.plot(np.clip(xf, 0, sample_rate // 2 + 1), np.abs(yf))
+    plt.plot(np.clip(xf, 0, sample_rate // 2 + 1), np.clip(np.abs(yf), 0, 2.5 * 10 ** 7))  # с масштабом
+    # plt.plot(np.clip(xf, 0, sample_rate // 2 + 1), np.abs(yf))  # без масштаба
 
     plt.title(beautiful_name)
     plt.ylabel('Амплитуда')
@@ -60,15 +60,14 @@ def fourier_transform(file_name: str, beautiful_name: str = ''):
     log.info(f"Save chart {file_name}")
     plt.savefig(f"{PROCESSED}/fft_signal/{png_file_name}", transparent=True)
 
-    plt.show()
+    # plt.show()
     plt.clf()
 
     log.info(f"End {file_name}")
 
 
 if __name__ == '__main__':
-
-    setup_matplotlib_text_color('white')
+    setup_matplotlib_text_color('black')
     setup_matplotlib(**{'font.size': '13'})
 
     build_charts_from_dir(

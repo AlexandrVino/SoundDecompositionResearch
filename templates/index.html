@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    <main class="container py-5 text-center">
+        <h1>Разложение трека по жанрам</h1>
+        <p><p>
+        <form action="/solve" method="post" enctype="multipart/form-data">
+           <p><input type="file" name="file" id="name" accept="audio/mp3">
+            <p><input type="submit" value="Отправить"></p>
+          </form>
+        {% block table %}{% endblock %}
+    </main>
+{% endblock %}

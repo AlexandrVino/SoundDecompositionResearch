@@ -14,7 +14,7 @@ from utils.my_argparse import setup_basic_config
 args = setup_basic_config()
 log = logging.getLogger(__name__)
 
-setup_matplotlib_text_color('white')
+setup_matplotlib_text_color('black')
 setup_matplotlib(**{'font.size': '13'})
 
 COLORS = {
@@ -129,6 +129,26 @@ def solution(integrals_solution):
         json.dump(sol, output_file, indent=4, ensure_ascii=False)
 
 
+def solution_for_oscillation(oscillation_solution):
+    """
+    :param current: current value of integral
+    :param title: Title of composition
+    :return:
+    """
+
+    with open(f'{PROCESSED}/oscillation.json') as input_file:
+        genres = json.load(input_file)
+
+    with open(f'{PROCESSED}/solution.json', encoding='utf8') as input_file:
+        sol = json.load(input_file)
+
+    for title, value in oscillation_solution.items():
+        solve(genres, sol, value, title)
+
+    with open(f'{PROCESSED}/solution.json', 'w', encoding='utf8') as output_file:
+        json.dump(sol, output_file, indent=4, ensure_ascii=False)
+
+
 def solve(genres, sol, current, title):
     for key, value in genres.items():
         mn, mx = sorted([value, current])
@@ -140,18 +160,24 @@ def solve(genres, sol, current, title):
     for key, value in sol[title].items():
         sol[title][key] = round(value / sm * 100, 2)
 
+    return sol
+
 
 def plot_average_integrals():
     plt.clf()
 
-    average = list(map(lambda x: (x[0], sorted(x[1])), find_song_names().items()))
-    data = [
-        [
-            round(sum(item_data) / len(item_data), 5),
-            NAMES[genre],
-            COLORS[genre]
-        ] for genre, item_data in average
-    ]
+    # average = list(map(lambda x: (x[0], sorted(x[1])), find_song_names().items()))
+    # data = [
+    #     [
+    #         round(sum(item_data) / len(item_data), 5),
+    #         NAMES[genre],
+    #         COLORS[genre]
+    #     ] for genre, item_data in average
+    # ]
+    # print(data)
+
+    data = [[19572370.77467515, 'Классика', '#21dec1'], [81159307.22493343, 'Метал', '#882bc3'],
+            [121763891.27453406, 'Поп', '#ff0000'], [84786868.98338048, 'Рок', '#0000fa']]
 
     items_data = np.array(data)
     fig, ax = plt.subplots()
@@ -159,15 +185,15 @@ def plot_average_integrals():
     for (data, name, color) in items_data:
         ax.bar([name], [float(data)], color=color)
 
-    ax.tick_params(color='white', labelcolor='white')
+    ax.tick_params(color='black', labelcolor='black')
     for spine in ax.spines.values():
-        spine.set_edgecolor('white')
+        spine.set_edgecolor('black')
 
-    ax.set_ylabel('Значение Интегралов')
+    ax.set_ylabel('Значение колебания')
     # ax.legend()
 
     plt.ylim(0, max(np.array(items_data[:, 0], dtype=np.float)) * 1.3)
-    plt.savefig(f"{PROCESSED}/least_squares/integrals.png", transparent=True)
+    plt.savefig(f"{PROCESSED}/oscillation/oscillation_avg_ok.png", transparent=True)
     plt.show()
 
 

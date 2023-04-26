@@ -60,6 +60,7 @@ def least_squares_chart(filename, beautiful_name=''):
 
     log.info(f"Call least_squares {filename[filename.find('source'):]}")
     res_lsq = least_squares(fun, x0=a0, args=(x, y))
+    print(res_lsq)
 
     log.info(f"Build chart {filename[filename.find('source'):]}")
     f = lambda x: sum([u * v for u, v in zip(res_lsq.x, [1, x, x ** 2])])

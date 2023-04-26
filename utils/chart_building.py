@@ -36,7 +36,7 @@ def build_chart(file_name: str, beautiful_name: str = '') -> None:
     data = get_file_data(file_name)
 
     log.info(f"Build chart {file_name}")
-    plt.plot([abs(val) / 1000 for val in data])
+    plt.plot([abs(val) for val in data])
 
     plt.ylabel('Амплитуда')
     plt.xlabel('Время')
@@ -53,7 +53,6 @@ def build_chart(file_name: str, beautiful_name: str = '') -> None:
 
 def build_charts_from_dir(dir_name: str, func: Callable, sep='', file_names: dict = {}) -> None:
     """
-
     :param sep: sep
     :param dir_name: dir from we should plot charts
     :param func: Callable object (same as function), which we use to plot
@@ -77,7 +76,7 @@ def build_charts_from_dir(dir_name: str, func: Callable, sep='', file_names: dic
 
 
 if __name__ == '__main__':
-    setup_matplotlib_text_color('white')
+    setup_matplotlib_text_color('black')
     setup_matplotlib(**{'font.size': '13'})
     build_charts_from_dir(
         f"{PROCESSED}/json",

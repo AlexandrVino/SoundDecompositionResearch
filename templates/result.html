@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+
+{% block table %}
+    <main class="container py-5 text-center">
+        <h3> {{ song_name }} </h3> <p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-start">Классика</th>
+                    <th class="text-start">Метал</th>
+                    <th class="text-start">Поп</th>
+                    <th class="text-start">Рок</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-start">{{ data["Классика"] }}%</td>
+                    <td class="text-start">{{ data["Метал"] }}%</td>
+                    <td class="text-start">{{ data["Поп"] }}%</td>
+                    <td class="text-start">{{ data["Рок"] }}%</td>
+                </tr>
+            </tbody> 
+        </table>
+    </main>
+
+{% endblock %}
